@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Operating System of a Business — v4 — A Governed Agentic Platform on Legacy SAP</title>
+<link rel="stylesheet" href="lib/reveal.css">
+<link rel="stylesheet" href="lib/theme-black.css" id="theme">
+<link rel="stylesheet" href="lib/monokai.css">
+<style>
+  :root{--ink:#e8eaf0;--muted:#9aa3b2;--accent:#ff7a29;--accent2:#4da3ff;
+        --good:#3ddc97;--warn:#ffcc55;--bad:#ff6b6b;--panel:#151a23}
+  .reveal{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+          font-size:30px;color:var(--ink)}
+  .reveal h1,.reveal h2,.reveal h3,.reveal h4{font-weight:700;letter-spacing:-.02em;text-transform:none;color:#fff}
+  .reveal h1{font-size:2em;line-height:1.05}
+  .reveal h2{font-size:1.42em;line-height:1.12;margin-bottom:.45em}
+  .reveal h3{font-size:1.02em;color:var(--accent)}
+  .reveal section{text-align:left}
+  .reveal .center{text-align:center}
+  .reveal p,.reveal li{line-height:1.42}
+  .reveal em{color:var(--muted);font-style:italic}
+  .reveal strong{color:#fff}
+  .kicker{color:var(--accent);font-size:.48em;letter-spacing:.16em;text-transform:uppercase;font-weight:700;margin-bottom:.55em}
+  .sub{color:var(--muted);font-size:.66em;line-height:1.4}
+  .lead{font-size:1.12em;line-height:1.35}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.5em;margin-top:.35em}
+  .stat{background:var(--panel);border:1px solid #232b38;border-radius:12px;padding:.5em .58em}
+  .stat b{display:block;font-size:1.42em;color:#fff;line-height:1.05}
+  .stat span{display:block;font-size:.44em;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;margin-top:.32em}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:.9em;align-items:start}
+  .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:.7em;align-items:start}
+  .cols.wide-left{grid-template-columns:1.35fr 1fr}
+  .cols.wide-right{grid-template-columns:1fr 1.35fr}
+
+  .card{background:var(--panel);border:1px solid #232b38;border-radius:12px;padding:.65em .75em;font-size:.7em}
+  .card h4{font-size:.95em;margin:0 0 .32em;color:var(--accent)}
+  .card.good{border-color:#28583f}.card.bad{border-color:#5a2b2b}.card.blue{border-color:#25456e}
+
+  .reveal pre{box-shadow:none;width:100%;font-size:.42em;margin:.35em 0}
+  .reveal pre code{padding:.85em 1em;border-radius:10px;max-height:none}
+  .reveal code{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .ascii{background:var(--panel);border:1px solid #232b38;border-radius:10px;padding:.65em .85em;
+         font-family:"SF Mono",Menlo,Consolas,monospace;font-size:.4em;line-height:1.35;color:#c9d3e2;white-space:pre;overflow:auto}
+
+  .reveal table{font-size:.58em;border-collapse:collapse;width:100%}
+  .reveal table th{color:var(--accent);text-align:left;border-bottom:1px solid #2a3444;padding:.3em .45em;
+                   font-size:.9em;text-transform:uppercase;letter-spacing:.06em}
+  .reveal table td{border-bottom:1px solid #1d242f;padding:.3em .45em}
+  .reveal table td.num{text-align:center;font-weight:700}
+
+  .shot{border-radius:10px;border:1px solid #2a3444;max-height:70vh;width:auto;box-shadow:0 18px 50px rgba(0,0,0,.55)}
+  .shot.tall{max-height:78vh}
+  .diagram{max-height:80vh;width:auto;border-radius:10px}
+  figure{margin:0;text-align:center}
+  figcaption{font-size:.44em;color:var(--muted);margin-top:.45em;text-align:center}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.65em;align-items:start}
+  .grid2 figure img{width:100%;max-height:46vh;object-fit:cover;object-position:top;border-radius:8px;border:1px solid #2a3444}
+  .grid2 figcaption{font-size:.42em;margin-top:.3em;text-align:left;color:var(--muted)}
+  .grid2 figcaption b{color:var(--accent);display:block;font-size:1.15em;margin-bottom:.12em}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em}
+  .grid3 figure img{width:100%;max-height:34vh;object-fit:cover;object-position:top;border-radius:8px;border:1px solid #2a3444}
+  .grid3 figcaption{font-size:.38em;margin-top:.28em;text-align:left;color:var(--muted)}
+  .grid3 figcaption b{color:var(--accent);display:block;font-size:1.15em}
+  .tourhead{font-size:.48em;color:var(--muted);margin-bottom:.45em}
+  /* portrait chat-panel crops: show the whole panel, don't cover-crop the top */
+  .panelgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2em;align-items:start;justify-items:center}
+  .panelgrid figure img{height:60vh;width:auto;max-width:100%;object-fit:contain;
+                        border-radius:8px;border:1px solid #2a3444}
+  .panelgrid figcaption{font-size:.42em;margin-top:.4em;text-align:center;color:var(--muted);max-width:22em}
+  .panelgrid figcaption b{color:var(--accent);display:block;font-size:1.15em;margin-bottom:.12em}
+
+  .pill{display:inline-block;padding:.1em .55em;border-radius:999px;font-size:.46em;font-weight:700;
+        letter-spacing:.06em;text-transform:uppercase;border:1px solid currentColor;margin-right:.3em}
+  .pill.exec{color:var(--accent2)}.pill.tech{color:var(--good)}.pill.hot{color:var(--accent)}
+
+  .rule{height:1px;background:#232b38;margin:.65em 0}
+  .big{font-size:1.42em;line-height:1.2;color:#fff}
+  .huge{font-size:1.9em;line-height:1.12;color:#fff}
+  .quote{border-left:3px solid var(--accent);padding-left:.75em;color:#dfe5ef;font-size:.9em;line-height:1.4}
+  ul.tight li{margin:.22em 0}
+  .reveal .slide-number{font-size:.55em}
+
+  /* competency matrix */
+  .skillgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8em;margin-top:.3em}
+  .skillcol{background:var(--panel);border:1px solid #232b38;border-radius:12px;padding:.55em .65em}
+  .skillhead{color:var(--accent);font-size:.42em;font-weight:700;letter-spacing:.12em;
+             text-transform:uppercase;margin-bottom:.5em}
+  .skill{display:grid;grid-template-columns:1fr 62px 22px;align-items:center;gap:.4em;margin:.28em 0}
+  .skill .sn{font-size:.4em;line-height:1.25;color:var(--ink)}
+  .skill b{font-size:.42em;color:#fff;text-align:right}
+  .skill .bar{display:block;height:7px;background:#222a36;border-radius:99px;overflow:hidden}
+  .skill .bar i{display:block;height:100%;background:var(--good);border-radius:99px}
+  .skill .bar.amber i{background:var(--warn)}
+  .skill .bar.red i{background:var(--bad)}
+  .scoregood{color:var(--good);font-weight:700}
+  .scorebad{color:var(--bad);font-weight:700}
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ══════════ ACT 0 · OPEN ══════════ -->
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">Syntell BizOps Intelligence</div>
+  <h1>The Operating System<br>of a Business</h1>
+  <p class="lead" style="margin-top:.55em">A governed <strong>agentic platform</strong> across engineering, manufacturing,<br>stock, procurement and finance — on an ERP with no API</p>
+  <div class="rule" style="max-width:460px;margin:1em auto"></div>
+  <p class="sub">1,184 commits · one engineer · Dec 2025 → Aug 2026<br>
+     24 views · 83 AI tools · 75 agent capabilities · 10 SAP connectors · 455 test files</p>
+  <aside class="notes">
+    Open by naming the misconception: people hear "budget modeller" and picture a
+    spreadsheet with charts. That was true for three weeks. Set the frame — this
+    talk is about what has to be architecturally true before you let an agent near
+    real money. Flag that I'll mark exec vs technical depth as we go.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">The mistake people make</div>
+  <p class="big" style="max-width:21em;margin:.2em auto">
+    A finance dashboard tells you <span style="color:var(--muted)">the score.</span><br><br>
+    An operating system tells you <span style="color:var(--accent)">why the score is what it is</span> —
+    and what you can still change.
+  </p>
+  <aside class="notes">
+    This is the thesis slide. In one session a user asks: what did we sell, can we
+    build it, do we have the parts, did the supplier price move, will we be late
+    and pay a penalty, what did engineering ship, what does the month-end pack say.
+    Same data, same engine, same permission model. That breadth IS the product.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">The constraint</div>
+  <h2>Our ERP cannot give us an API</h2>
+  <div class="cols">
+    <div>
+      <ul class="tight">
+        <li>SAP <strong>ECC 6.0</strong> — no HANA, no Fiori, no OData</li>
+        <li>"Reporting" = run a t-code, export an ALV grid, email it</li>
+        <li>Enabling OData needs BASIS, change management and transport requests — <strong>3 months minimum</strong></li>
+      </ul>
+    </div>
+    <div>
+      <div class="card">
+        <h4>The upgrade maths</h4>
+        S/4HANA migrations start at <strong>~$250K</strong> for small companies, millions for mid-market.<br><br>
+        Gartner: of 35,000 ECC customers, <strong>~17,000</strong> will still be on legacy past the 2027 deadline.<br><br>
+        <em>We are one of them.</em>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    Don't villainise SAP — the transaction system is fine at transactions. The gap
+    is decisions. Most rooms have someone in exactly this position; that's the hook.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">The actual question</div>
+  <p class="big" style="max-width:20em;margin:0 auto">
+    How do you get AI-native decision support out of an ERP that
+    <span style="color:var(--accent)">cannot give you an API</span> —
+    without a transformation budget,<br>
+    and <strong>without ever being wrong about a number?</strong>
+  </p>
+  <aside class="notes">
+    Land hard on the last clause and pause. A dashboard that's occasionally wrong
+    is worse than none — people stop checking. An AI that's occasionally wrong
+    about money is wrong FLUENTLY, at scale, with convincing citations.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Where it landed</div>
+  <h2>The platform today</h2>
+  <div class="stats">
+    <div class="stat"><b>1,184</b><span>commits</span></div>
+    <div class="stat"><b>1</b><span>engineer + AI agents</span></div>
+    <div class="stat"><b>24</b><span>routed views</span></div>
+    <div class="stat"><b>83</b><span>AI tool definitions</span></div>
+  </div>
+  <div class="stats" style="margin-top:.5em">
+    <div class="stat"><b>75</b><span>agent capabilities</span></div>
+    <div class="stat"><b>10</b><span>SAP connectors</span></div>
+    <div class="stat"><b>12 / 34</b><span>roles / permissions</span></div>
+    <div class="stat"><b>455</b><span>test files</span></div>
+  </div>
+  <div class="stats" style="margin-top:.5em">
+    <div class="stat"><b>11</b><span>cosmos containers</span></div>
+    <div class="stat"><b>11</b><span>admin capabilities</span></div>
+    <div class="stat"><b>~364k</b><span>lines of source</span></div>
+    <div class="stat"><b>$ single digits</b><span>monthly db spend</span></div>
+  </div>
+  <p class="sub" style="margin-top:.7em">Built alongside a day job. The shape matters more than the scale — the next slide is the shape.</p>
+  <aside class="notes">
+    The single-digit DB bill is the line execs remember. It's a consequence of the
+    partition strategy, not frugality — say that, it lands better.
+  </aside>
+</section>
+
+<section data-background-color="#080b10" class="center">
+  <img class="diagram" src="diagrams/01-platform-stack.svg" alt="Platform stack">
+  <aside class="notes">
+    Three call-outs, then move: (1) co-located in SA North with Cosmos — latency
+    went 180ms to ~5ms when we left US-hosted Static Web Apps; (2) the AI service
+    is separate so a heavy query can't starve a budget save; (3) the Function App
+    is packaged independently — that boundary caused a SEV1, story later.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">The spine <span class="pill tech">technical</span></div>
+  <h2>One calculation engine, three runtimes</h2>
+  <div class="cols wide-left">
+    <div>
+      <div class="ascii">        financialModel.js
+         (pure function — no React, no I/O)
+                │
+   ┌────────────┼────────────┐
+   ▼            ▼            ▼
+ BROWSER      API         AI SERVICE
+ live         server-side  copilot
+ simulation   calculation  arithmetic</div>
+      <p class="sub" style="margin-top:.55em">Written on day one — before any UI, backend or database. It survived every
+      refactor, three hosting migrations and a service extraction.</p>
+    </div>
+    <div>
+      <div class="card good">
+        <h4>Why this matters for AI</h4>
+        The copilot does not <em>estimate</em> margin. It calls the <strong>same function</strong>
+        the dashboard renders.<br><br>
+        There is exactly <strong>one</strong> definition of margin in this system — so the AI
+        and the screen can never disagree.
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    Most reusable lesson in the talk: build the calculation engine first, as a pure
+    function, test it before you write a component. If your maths is wrong your
+    charts are beautiful lies — and your AI narrates those lies fluently.
+  </aside>
+</section>
+
+<!-- ══════════ ACT 1 · THE OPERATING MODEL ══════════ -->
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">Act one</div>
+  <p class="huge">The operating model</p>
+  <p class="lead" style="margin-top:.6em;color:var(--muted)">Product engineering · manufacturing · stock · procurement · contracts</p>
+  <p class="sub" style="margin-top:1em">This is the half of the platform people don't expect.</p>
+  <aside class="notes">
+    Signal the pivot clearly. If the audience thinks this is a finance tool they'll
+    under-rate everything that follows.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Product engineering</div>
+  <p class="tourhead">The roadmap is a data source, not a slide — six lenses, live from Jira</p>
+  <div class="grid2">
+    <figure><img src="img/v3-roadmap-flow.png" alt="Flow health">
+      <figcaption><b>Flow Health</b>Weekly throughput, aging WIP, stuck &gt;90d, lead time — per project.
+        Is the run rate rising or falling against the trailing quarter?</figcaption></figure>
+    <figure><img src="img/v3-roadmap-quality.png" alt="Quality">
+      <figcaption><b>Quality</b>Bug ratio, hygiene signals, oldest open item. The same permission
+        model that gates revenue gates this.</figcaption></figure>
+  </div>
+  <aside class="notes">
+    Second-order effect I didn't anticipate: putting engineering telemetry beside
+    financial telemetry makes capacity conversations concrete. "We can't take that
+    on" stops being an opinion and becomes a chart.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Manufacturing production</div>
+  <p class="tourhead">Overview · BuildState · Repairs · Capacity Planner</p>
+  <div class="grid2">
+    <figure><img src="img/v3-production.png" alt="Production overview">
+      <figcaption><b>Production Insights</b>Throughput and build state — the operational constraint
+        sitting behind every revenue plan.</figcaption></figure>
+    <figure><img src="img/v3-production-repair.png" alt="Repairs">
+      <figcaption><b>Repairs</b>Repair jobs and backlog risk, drillable to individual job detail.</figcaption></figure>
+  </div>
+  <p class="sub" style="margin-top:.5em">The order book is only real if you can build against it.</p>
+  <aside class="notes">
+    This pairing is what operations people react to. Revenue plans that ignore
+    build capacity are fiction with a chart on top.
+  </aside>
+</section>
+
+<section data-background-color="#080b10">
+  <figure>
+    <img class="shot tall" src="img/v3-stock.png" alt="Stock Management Insights">
+    <figcaption><strong>Not an inventory dashboard — a stock decision system.</strong>
+      "What can we ship now? Build now? What unblocks as supplier POs land?"</figcaption>
+  </figure>
+  <aside class="notes">
+    Point at "Actually unblocks a build" — inbound stock that isn't the current
+    bottleneck doesn't help you, and the UI says so. Also point at the honesty:
+    v1 answers are explicitly gross_buildable, NOT MD04-reservation-aware free
+    stock, and it says that on the page. A number with a stated basis is worth ten
+    numbers without one.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Procurement &amp; supply</div>
+  <p class="tourhead">Three of the ten SAP connectors are procurement-side: purchase orders · PO lines · GRN receipts</p>
+  <div class="grid2">
+    <figure><img src="img/v3-supplier-po.png" alt="Supplier PO Insights">
+      <figcaption><b>Supplier PO Insights</b>Supplier price comparison, procurement scope analysis and
+        commitment trends — the inbound side of the build model.</figcaption></figure>
+    <figure><img src="img/v3-stock-unblock.png" alt="Unblock as POs land">
+      <figcaption><b>Unblock as POs land</b>Which open POs <em>actually</em> clear a build — and which are
+        landing on stock that isn't the current bottleneck.</figcaption></figure>
+  </div>
+  <p class="sub" style="margin-top:.5em">Procurement and manufacturing are the same question asked from two ends. The platform answers both from one dataset.</p>
+  <aside class="notes">
+    The build model runs off a code-owned recipe matrix combined with SAP stock,
+    order book and product master. Recipes moved from a manager's spreadsheet into
+    code — that migration was itself a project, and it's why the answer is reproducible.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Manufacturing · capacity</div>
+  <p class="tourhead">The Capacity Planner — the most operational surface in the platform</p>
+  <figure><img class="shot tall" src="img/v3-production-cap.png" alt="Capacity Planner"></figure>
+  <aside class="notes">
+    Three details to point at.
+    (1) Explicitly READ-ONLY unless you're the Production Manager — and the page says so
+    rather than silently discarding edits.
+    (2) SA public holidays are modelled as TOGGLEABLE — "work this day" is a real
+    scenario, not an assumption baked into a calendar.
+    (3) Scenarios can be pinned and compared — the useful artefact of capacity
+    planning is the delta between two plans, not one plan.
+    Team names are blurred: they're real employees.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Contract management</div>
+  <p class="tourhead">Multi-year client contracts — deliberately fiscal-year-agnostic</p>
+  <div class="grid2">
+    <figure><img src="img/v3-contract.png" alt="Contract dashboard">
+      <figcaption><b>Contract at a glance</b>Order register, delivery clock, penalty exposure, compliance.
+        "Every figure is computed from the order register — the summary sheet writes itself."</figcaption></figure>
+    <figure><img src="img/v3-contract-orders.png" alt="Order register">
+      <figcaption><b>Order Register</b>The source of truth the dashboard is derived from — not a
+        parallel set of numbers.</figcaption></figure>
+  </div>
+  <aside class="notes">
+    Contracts span fiscal years, so this tab is deliberately NOT in the past-FY block
+    list. Built from a formal URS whose backlog says an item is DONE only after
+    PRODUCTION verification — not when local tests go green.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Contract management</div>
+  <div class="grid2">
+    <figure><img src="img/v3-contract-master.png" alt="Contract master">
+      <figcaption><b>The translation layer — client ↔ us</b>Client item codes mapped to ours, with
+        mapping confidence. Unglamorous, and the reason penalty maths can be trusted.</figcaption></figure>
+    <figure><img src="img/v3-contract-reports.png" alt="Reports and export">
+      <figcaption><b>Reports &amp; Export</b>The monthly client report — generated from the register,
+        not re-keyed.</figcaption></figure>
+  </div>
+  <p class="sub" style="margin-top:.5em"><strong>The bug that shows the rigour:</strong> the dashboard counted PO <em>lines</em> while labelling them
+    <em>POs</em> — 528 lines vs 499 distinct PO documents — and penalties were counted per PO. The KPI block was silently mixing two grains.</p>
+  <aside class="notes">
+    That grain-mixing bug is a good one to dwell on: it produced numbers that were
+    individually defensible and collectively meaningless. Nobody spots that in a demo.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Procurement <span class="pill hot">3 of the 10 connectors</span></div>
+  <h2>Supplier PO Insights — a suite, not a widget</h2>
+  <figure><img class="shot" style="max-height:52vh" src="img/v3-supplier-po.png" alt="Supplier PO Insights"></figure>
+  <p class="sub" style="margin-top:.4em">Seven tabs — Overview · Inbound Runway · Suppliers · Savings · Supplier Trends · Material Costs · Exceptions —
+    over purchase orders, PO lines and GRN receipts.</p>
+  <aside class="notes">
+    Two things worth calling out.
+    (1) The SCOPE filter (product materials / product adjacent / text materials /
+    business overhead / unclassified) is a SEMANTIC decision made in the ETL, not a
+    UI convenience. Procurement spend isn't homogeneous; mixing categories makes
+    every ratio meaningless.
+    (2) There's a DATA QUALITY hero card. Most dashboards hide their own uncertainty.
+    The honest answer to "how much are we committed to" depends on how much of the
+    PO book could be classified at all.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Procurement</div>
+  <p class="tourhead">Where the supply side becomes a decision</p>
+  <div class="grid3">
+    <figure><img src="img/v3-po-runway.png" alt="Inbound runway">
+      <figcaption><b>Inbound Runway</b>What arrives, when — and whether it lands on the current bottleneck.</figcaption></figure>
+    <figure><img src="img/v3-po-trends.png" alt="Supplier trends">
+      <figcaption><b>Supplier Trends</b>Price movement over time — how you catch a supplier walking a price up quietly.</figcaption></figure>
+    <figure><img src="img/v3-po-material.png" alt="Material costs">
+      <figcaption><b>Material Costs</b>Product-material cost comparison across suppliers.</figcaption></figure>
+  </div>
+  <aside class="notes">
+    Procurement and manufacturing are the same question asked from two ends. The
+    platform answers both from one dataset — that's why Stock's "unblock as POs land"
+    and this view agree by construction rather than by reconciliation.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Month-end <span class="pill hot">the number the business reports on</span></div>
+  <h2>FinPack — a real management-accounts pack</h2>
+  <div class="grid3">
+    <figure><img src="img/v3-finpack-income.png" alt="Income statement">
+      <figcaption><b>Income Statement</b></figcaption></figure>
+    <figure><img src="img/v3-finpack-balance.png" alt="Balance sheet">
+      <figcaption><b>Balance Sheet</b></figcaption></figure>
+    <figure><img src="img/v3-finpack-cashflow.png" alt="Cash flow">
+      <figcaption><b>Cash Flow</b></figcaption></figure>
+  </div>
+  <div class="grid3" style="margin-top:.5em">
+    <figure><img src="img/v3-finpack-drift.png" alt="Forecast drift">
+      <figcaption><b>Forecast Drift</b>The view that earns the module.</figcaption></figure>
+    <figure><img src="img/v3-finpack-recon.png" alt="Reconciliation">
+      <figcaption><b>Reconciliation</b>Where the pack proves itself.</figcaption></figure>
+    <figure><img src="img/v3-po-suppliers.png" alt="Suppliers">
+      <figcaption><b>+ month-by-month</b>M01…M12 navigation across the fiscal year.</figcaption></figure>
+  </div>
+  <p class="sub" style="margin-top:.45em">FinPack is declared <strong>authoritative for PBT</strong> in the shared grounding —
+    so neither the copilot nor an agent may quote a PBT figure from anywhere else.</p>
+  <aside class="notes">
+    At month-end the useful question is never "what is the number" — it's "what moved,
+    and why". explain_finpack_drift exists for exactly that.
+  </aside>
+</section>
+
+<!-- ══════════ ACT 2 · FINANCIAL SPINE ══════════ -->
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">Act two</div>
+  <p class="huge">The financial spine</p>
+  <p class="lead" style="margin-top:.6em;color:var(--muted)">Plan · simulate · actuals · the official monthly pack</p>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Plan and simulate</div>
+  <div class="grid2">
+    <figure><img src="img/v3-budget-plan.png" alt="Budget plan">
+      <figcaption><b>Budget Plan</b>Bottom-up customer and product planning, regional goals,
+        logistics markup configuration, and the budget lock lifecycle.</figcaption></figure>
+    <figure><img src="img/v3-simulator.png" alt="Budget simulator">
+      <figcaption><b>Budget Simulator</b>Drag a margin or logistics slider — PBT, break-even and the
+        profitability timeline recompute client-side in <strong>under 16ms</strong>.</figcaption></figure>
+  </div>
+  <aside class="notes">
+    Finance people think in rapid what-if loops. Any latency kills adoption —
+    that's why the engine runs in the browser rather than round-tripping.
+    Before this, budget revisions were a quarterly event.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">FinPack <span class="pill hot">the number the business reports on</span></div>
+  <h2>The official monthly management pack</h2>
+  <div class="cols wide-left">
+    <div>
+      <p style="font-size:.86em">The strictest surface in the platform gets its own tool family:</p>
+      <div class="ascii">list_finpack_packs          compare_finpack_packs
+query_finpack_pack          query_finpack_line
+query_finpack_reconciliation
+query_finpack_narrative_register
+query_finpack_forecast_settlement
+get_finpack_kpi_evolution
+explain_finpack_drift        ← the important one</div>
+    </div>
+    <div>
+      <div class="card good">
+        <h4>Why <code>explain_finpack_drift</code> matters</h4>
+        At month-end the useful question is never <em>"what is the number"</em>.<br><br>
+        It is <strong>"what moved, and why"</strong>.<br><br>
+        A pack that can explain its own drift against the prior month is a different
+        artefact from a pack that merely states a total.
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    If someone asks "why so many tools" — this is the answer. Tool granularity
+    mirrors the granularity of the questions people actually ask.
+  </aside>
+</section>
+
+<!-- ══════════ SALES COMMAND CENTER — DEEP DIVE ══════════ -->
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">The surface the sales team actually lives in</div>
+  <p class="huge">Sales Command Center</p>
+  <p class="lead" style="margin-top:.6em;color:var(--muted)">One place to inspect an account portfolio —<br>and to hold it to account</p>
+  <aside class="notes">
+    This is the most-used view in the platform and the one I under-showed until now.
+    It is not a sales dashboard. It's an account-management control surface: every
+    widget re-scopes to whichever slice of the portfolio you select, so the same page
+    is the GM's view and one account manager's view.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">The organising idea</div>
+  <h2>One filter bar re-scopes the entire page</h2>
+  <div class="cols wide-left">
+    <div>
+      <div class="ascii">ACCOUNT MANAGER  ·  REGION GROUP  ·  REGION  ·  SPECIFIC CUSTOMER
+                                                        [ Reset ]
+         │
+         └─ every KPI, chart, table and drilldown below
+            re-computes against the selected scope</div>
+      <p class="sub" style="margin-top:.6em">Four hero KPIs — <strong>Total Portfolio Budget · Actual (Full Year) ·
+        Full-Year Variance · Open Order Book</strong> — then seven analytical sections, all scope-aware.</p>
+    </div>
+    <div>
+      <div class="card good"><h4>Why this matters organisationally</h4>
+        The GM and the account manager look at <strong>the same page</strong>, not two different
+        reports that disagree.<br><br>
+        A portfolio review stops being "send me your numbers" and becomes
+        "let's both look at the same scope."</div>
+    </div>
+  </div>
+  <aside class="notes">
+    The scope chip that appears on each widget when you filter is a small thing that
+    matters a lot — you can never be looking at a chart and be unsure whose portfolio
+    it is.
+  </aside>
+</section>
+
+<section data-background-color="#080b10">
+  <figure>
+    <img class="shot tall" src="img/v4-scc-all-hero.png" alt="Sales Command Center — full portfolio">
+    <figcaption>Full portfolio view. Filter bar, four hero KPIs, and Gap to Budget Analysis —
+      actual vs latest forecast vs budget target, with <strong>Final Attainment</strong> and <strong>Forecast Visibility</strong> bars.</figcaption>
+  </figure>
+</section>
+
+<section data-background-color="#080b10">
+  <figure>
+    <img class="shot tall" src="img/v4-scc-am-hero.png" alt="Single account manager portfolio">
+    <figcaption>The same page, scoped to <strong>one account manager</strong>. Note the scope chip on every widget,
+      and "Drill down through your portfolio" with BACK navigation.</figcaption>
+  </figure>
+  <aside class="notes">
+    This is the slide that explains the product. Nothing was rebuilt for the account
+    manager — it's the same components, re-scoped. That's why the numbers can't
+    diverge between a manager's view and management's view.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Portfolio inspection</div>
+  <p class="tourhead">Customer Health &amp; Detailed Performance — the account manager's working list</p>
+  <figure><img class="shot" style="max-height:56vh" src="img/v4-scc-05-customer-health.png" alt="Customer health table"></figure>
+  <p class="sub" style="margin-top:.4em">Status badges — <strong>Behind Plan · At Risk · Exceeded · Unplanned</strong> — beside Planned Margin vs
+    Actual Margin, full-year budget, actual, three years of history, open order book and variance.
+    Filterable by plan status and customer type; exportable to Copy / CSV / Excel.</p>
+  <aside class="notes">
+    Two details worth naming.
+    (1) "UNPLANNED" is a first-class status — revenue that arrived from a customer
+    who wasn't in the plan is a different management conversation from a customer
+    who beat their target, and the table refuses to blur them together.
+    (2) "Planned Margin %" is explicitly labelled as the budget-model weighted margin,
+    NOT an SAP gross margin. The column says so, because two things called margin
+    that mean different things is how trust dies.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Lenses</div>
+  <p class="tourhead">The same portfolio, four ways — because the question changes the shape</p>
+  <div class="grid3">
+    <figure><img src="img/v4-scc-quarterly.png" alt="Quarterly">
+      <figcaption><b>FULL YEAR / QUARTERLY / 12 MONTHS</b>Attainment reads differently over a quarter than a year.</figcaption></figure>
+    <figure><img src="img/v4-scc-grossprofit.png" alt="Gross profit lens">
+      <figcaption><b>Net Sales / Gross Profit / Quantity</b>A rep can hit revenue and miss margin. Both are visible.</figcaption></figure>
+    <figure><img src="img/v4-scc-04-productmix.png" alt="Product mix">
+      <figcaption><b>Product Mix by Category</b>What the portfolio is actually made of — and how that shifted.</figcaption></figure>
+  </div>
+  <aside class="notes">
+    The Quantity lens matters more than it looks: in a hardware business, revenue
+    can hold while unit volume falls because price moved. Only the quantity lens
+    shows you that.
+  </aside>
+</section>
+
+<section data-background-color="#080b10">
+  <figure>
+    <img class="shot tall" src="img/v4-scc-explorer-by-am.png" alt="Sales Performance Explorer grouped by account manager">
+    <figcaption><strong>Sales Performance Explorer</strong> — a pivot builder over the active scope.
+      Here: <strong>variance by account manager</strong>, split by customer type, with linked account detail.</figcaption>
+  </figure>
+  <aside class="notes">
+    Group by: sales group / region / ACCOUNT MANAGER / customer type / plan status /
+    health status / customer. Split by, metric, sort, top-N. Plus saved presets —
+    Regional Gap, Account Watchlist, Order Book Cover, Unplanned Revenue,
+    Channel vs Municipal.
+    This is the slide for "how do you review a sales team": you group by manager,
+    sort by worst variance, and the conversation starts itself.
+    Note the caption in the product: "SAP actuals/order book stay separate from
+    budget-model targets" — the two worlds are never silently merged.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Drill-down</div>
+  <div class="grid2">
+    <figure><img src="img/v4-scc-orderbook.png" alt="Customer order book inspection">
+      <figcaption><b>Customer Order Book Inspection</b>From a portfolio number down to the individual open
+        order lines behind it — without leaving the page or changing tool.</figcaption></figure>
+    <figure><img src="img/v4-scc-am-customers.png" alt="Account manager customer list">
+      <figcaption><b>Scoped customer list</b>The same table, filtered to one manager's accounts —
+        their working list for the week.</figcaption></figure>
+  </div>
+  <p class="sub" style="margin-top:.5em">Portfolio → customer → order line. Three levels, one surface, one permission model.</p>
+</section>
+
+<section data-background-color="#080b10">
+  <figure>
+    <img class="shot tall" src="img/v4-scc-explainer.png" alt="Insight explainer drawer">
+    <figcaption>Every widget carries an <strong>Explain</strong> affordance opening this drawer:
+      <strong>what this shows · data sources (with the exact ETL defType) · how it is calculated</strong> — and
+      <strong>"Ask AI About This"</strong>, which hands the widget's context straight to the copilot.</figcaption>
+  </figure>
+  <aside class="notes">
+    This is the semantic layer made visible — 170 catalog entries, one per widget.
+    It answers "where does this number come from" without a Slack message, and it's
+    the same catalog the AI reads via get_insight_definition. One definition, two
+    consumers: the human and the model.
+    "Ask AI About This" is the bridge — it's how a dashboard becomes a conversation
+    without the user having to describe what they're looking at.
+  </aside>
+</section>
+
+<!-- ══════════ ACT 3 · SAP BRIDGE ══════════ -->
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">Act three</div>
+  <p class="huge">The SAP bridge</p>
+  <p class="lead" style="margin-top:.6em;color:var(--muted)">Start with the export, not the API</p>
+</section>
+
+<section data-background-color="#080b10" class="center">
+  <img class="diagram" src="diagrams/05-sap-connector-pattern.svg" alt="SAP connector pattern">
+  <aside class="notes">
+    If they take one engineering idea from this talk, take the run contract:
+    make your pipeline prove conservation of rows before it may publish.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">The gate <span class="pill tech">technical</span></div>
+  <h2>No-loss reconciliation</h2>
+  <pre><code class="language-javascript" data-trim>
+importStatus            === 'SUCCESS'
+&& latestPointerUpdated === true
+&& reconciliation.isBalanced === true
+//  sourceRows === includedRows + excludedRows
+  </code></pre>
+  <div class="cols" style="margin-top:.4em">
+    <div class="card good"><h4>If it balances</h4>Promote to latest · bump the per-connector manifest ·
+      invalidate exactly the affected client caches.</div>
+    <div class="card bad"><h4>If one row vanished</h4>The run <strong>fails</strong>. The previous good data stays live.
+      Nobody sees a silently wrong number.</div>
+  </div>
+  <p class="sub" style="margin-top:.6em">Silent data loss is the failure mode that destroys trust in a finance tool —
+    so it's designed out at the pipeline boundary, not checked for afterwards.</p>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Cost engineering <span class="pill exec">exec</span> <span class="pill tech">technical</span></div>
+  <h2>Separate freshness signalling from data transfer</h2>
+  <div class="cols">
+    <div>
+      <div class="card bad"><h4>Naive</h4>Re-read all SAP data on every page load, for every user, forever —
+        for data that changes <strong>once a week</strong>.</div>
+      <div class="card good" style="margin-top:.45em"><h4>What we do</h4>
+        Poll a tiny <strong>manifest</strong> every ~60s. Cache <strong>payloads</strong> for days.
+        Refetch only when a <strong>per-connector</strong> version moves — a weekly stock ETL
+        no longer invalidates the monthly FinPack cache.</div>
+    </div>
+    <div>
+      <div class="card blue"><h4>Encrypted client cache</h4>
+        AES-GCM · per-surface keys · gzip-before-encrypt · operator-controlled key rotation ·
+        <strong>fail-closed</strong> if WebCrypto or the key fetch is unavailable.<br><br>
+        <em>No plaintext financial data reaches localStorage.</em></div>
+      <div class="card good" style="margin-top:.45em"><h4>Result</h4>
+        Single-digit monthly Cosmos spend on a system carrying a decade of fiscal history.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ACT 4 · AI ENGINE ══════════ -->
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">Act four</div>
+  <p class="huge">The AI engine</p>
+  <p class="lead" style="margin-top:.6em;color:var(--muted)">Tools, not retrieval</p>
+</section>
+
+<section data-background-color="#0c1017" class="center">
+  <p class="big" style="max-width:19em;margin:.3em auto">
+    This is not a document-search problem.<br>
+    <span style="color:var(--accent)">It's a database-query problem.</span>
+  </p>
+  <p class="sub" style="margin-top:1.2em;text-align:center">Retrieval is probabilistic. Its failure mode is a confident answer derived from
+    <em>approximately</em> the right rows —<br>indistinguishable from a correct one until someone checks.</p>
+  <aside class="notes">
+    The most consequential AI decision in the project was refusing RAG for the
+    numbers. Say it plainly and don't over-argue it.
+  </aside>
+</section>
+
+<section data-background-color="#080b10" class="center">
+  <img class="diagram" src="diagrams/02-ai-engine-core.svg" alt="AI engine core">
+  <aside class="notes">
+    Two layers of routing and they are NOT interchangeable — chat profile = page,
+    tool profile = within-chat routing. Blurring them is the easiest way to expose
+    a customer-facing prompt to internal data tools. The contract says so explicitly.
+    Also point at the hard budgets: 15 tool calls, 10 iterations, 300s ceiling.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Coverage</div>
+  <h2>83 tools, routed by question and page</h2>
+  <table>
+    <tr><th>Tool group</th><th style="text-align:center">Tools</th><th>Answers questions like</th></tr>
+    <tr><td><strong>finance</strong></td><td class="num">67</td><td>plan vs actual, PBT gap, margin analysis, fiscal-year comparison</td></tr>
+    <tr><td><strong>sap</strong></td><td class="num">66</td><td>debtors risk, delivery performance, customer concentration, YoY</td></tr>
+    <tr><td><strong>engineering</strong></td><td class="num">16</td><td>Jira throughput, stuck items, project health</td></tr>
+    <tr><td><strong>market</strong></td><td class="num">16</td><td>competitor dominance, coverage gaps, installed base</td></tr>
+    <tr><td><strong>scenario</strong></td><td class="num">13</td><td>what-if simulation, services model, goal seek</td></tr>
+    <tr><td><strong>stock_decision</strong></td><td class="num">5</td><td>available-to-build, orderbook coverage, material 360</td></tr>
+    <tr><td><strong>production</strong> · <strong>contract</strong> · <strong>roadmap</strong></td><td class="num">4 ea</td><td>repair jobs, contract 360, roadmap delivery</td></tr>
+    <tr><td><strong>methodology</strong></td><td class="num">3</td><td>"how exactly is this computed?" — the trust tools</td></tr>
+  </table>
+  <p class="sub" style="margin-top:.55em">Organised by <strong>business domain</strong>, not storage layout — so a user's question maps onto a tool without the model inventing a join.</p>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Across the whole business</div>
+  <p class="tourhead">I drove it as an executive would. Prose blurred; structure and provenance are not.</p>
+  <div class="panelgrid">
+    <figure><img src="img/ai01-stock-buildable-panel.png" alt="Stock buildability">
+      <figcaption><b>Manufacturing</b>"Which products can we build right now, and which single
+        component blocks the most builds?"</figcaption></figure>
+    <figure><img src="img/ai03-procurement-suppliers-panel.png" alt="Procurement">
+      <figcaption><b>Procurement</b>"Which suppliers moved prices most, and where are we
+        over-committed on open POs?"</figcaption></figure>
+  </div>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Across the whole business</div>
+  <div class="panelgrid">
+    <figure><img src="img/ai04-finpack-drift-panel.png" alt="FinPack drift">
+      <figcaption><b>Month-end</b>"Explain the drift in the latest FinPack versus the prior
+        month, and what caused it."</figcaption></figure>
+    <figure><img src="img/ai06-contract-penalties-panel.png" alt="Contract penalties">
+      <figcaption><b>Contracts</b>"What is our delivery penalty exposure, and which orders are
+        at risk of going late?"</figcaption></figure>
+  </div>
+  <aside class="notes">
+    One AI surface answering across five business domains, each with its own tool
+    group, each grounded in a different SAP connector — that's the payoff of tool
+    routing over one giant prompt.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">What a good answer looks like</div>
+  <h2>Structure, not fluency</h2>
+  <p class="sub">Asked where gross margin was eroding, the copilot produced — in this order:</p>
+  <ol class="tight" style="font-size:.78em">
+    <li><strong>Provenance first.</strong> Named the retained FY26-W53 snapshot, noted the data was 8 days old,
+        and disclaimed it was <strong>not</strong> the final fiscal-year-close position.</li>
+    <li><strong>Contradicted the premise.</strong> "Your overall gross margin is <strong>not</strong> eroding — but three pockets are."</li>
+    <li><strong>Decomposed</strong> the erosion by product category with the rate change on each.</li>
+    <li><strong>Line-level evidence</strong> — part numbers showing cost bookings against zero revenue.</li>
+    <li><strong>Tabulated</strong> the customers driving the drag, ranked by GP impact.</li>
+    <li><strong>Proposed a causal hypothesis</strong> — tender pricing on a volume ramp — flagged <em>as</em> a hypothesis.</li>
+  </ol>
+  <p class="sub" style="margin-top:.5em">None of that is prompt politeness. It falls out of tools returning <strong>typed, timestamped, scope-filtered</strong>
+    payloads. The model does synthesis — which LLMs are good at — over deterministic retrieval and arithmetic, which they are not.</p>
+  <aside class="notes">
+    "Contradicted the premise" is the bullet that lands with executives. An
+    assistant that only confirms what you asked is a liability.
+  </aside>
+</section>
+
+<section data-background-color="#080b10">
+  <figure>
+    <img class="shot tall" src="img/ai09-honest-failure-and-inference-split.png" alt="Honest failure">
+    <figcaption>Captured live, not staged. <strong>This slide is the one I'd put in front of a sceptical CTO.</strong></figcaption>
+  </figure>
+  <aside class="notes">
+    Two behaviours here, both more persuasive than any correct answer.
+    (1) IT REFUSES: "SOURCE: none — tools unavailable … all three live Jira queries
+    timed out … the connection did not respond within the allowed window this turn."
+    Then it lists what it WOULD cover once Jira responds. An assistant that invents
+    a plausible throughput number when its tool times out is worse than no assistant.
+    (2) IT SEPARATES FACT FROM INFERENCE: "Facts above are tool-derived; the 'check
+    Other Expenses' and 'profit-to-cash lag' points are my inferences."
+    That line is the difference between an analyst and an oracle.
+    Note: this is the one screenshot deliberately left readable — every visible
+    string was reviewed by hand.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">The semantic layer <span class="pill tech">technical</span></div>
+  <h2>170 insight definitions — the platform's own dictionary</h2>
+  <div class="cols wide-left">
+    <div>
+      <p style="font-size:.86em">Every metric on every dashboard has a catalog entry, and the AI has tools to read it:
+        <code>get_insight_definition</code>, <code>search_insights</code>.</p>
+      <div class="card good"><h4>The instruction that matters</h4>
+        The grounding tells the model that <strong>catalog formulas and assumptions beat general
+        finance knowledge.</strong><br><br>
+        Asked "how is margin calculated here", it answers from <em>this platform's</em> definition —
+        not from what margin usually means.</div>
+    </div>
+    <div>
+      <div class="card"><h4>Why this is the difference</h4>
+        An assistant that knows <strong>finance</strong> is a search engine with manners.<br><br>
+        An assistant that knows <strong>your</strong> finance can be argued with — and corrected —
+        because its definitions are inspectable artefacts rather than model priors.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    This is also the answer to "how do you stop it hallucinating methodology" — you
+    give the methodology a home, a schema and a tool, and then instruct the model
+    that the catalog outranks its own training.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Human-in-the-loop <span class="pill tech">technical</span></div>
+  <h2>The clarification gate — deterministic, not prompted</h2>
+  <table>
+    <tr><th>Resolver outcome</th><th>Action</th></tr>
+    <tr><td>not resolved</td><td><strong>clarify</strong> — stop and ask</td></tr>
+    <tr><td>resolved, confidence &lt; 0.70</td><td><strong>clarify</strong> — catches all-token guesses</td></tr>
+    <tr><td>resolved, 0.70 – 0.90</td><td><strong>echo</strong> — proceed, but say "reading X as Y — correct me"</td></tr>
+    <tr><td>resolved, ≥ 0.90</td><td><strong>answer</strong> — proceed silently</td></tr>
+  </table>
+  <p class="sub" style="margin-top:.5em">When ambiguous, the handler returns a <strong>slim payload — candidates only, no data</strong>.</p>
+  <p class="quote" style="margin-top:.6em;font-size:.92em">The system prompt already said "if ambiguous, ASK" — and the model still
+    guessed and proceeded. <strong>You cannot make the model ask by instructing it harder; you make answering
+    impossible without asking by withholding the data.</strong></p>
+  <aside class="notes">
+    Real example from the incident that produced this: "M20 cabinet" resolved to a
+    securing strap at low confidence, and the model answered anyway. Six lines of
+    policy fixed what three prompt revisions could not.
+    This generalises well beyond this codebase — if you want a behaviour from a
+    model, don't ask harder, change what is possible.
+  </aside>
+</section>
+
+<section data-background-color="#080b10" class="center">
+  <img class="diagram" src="diagrams/08-model-discovery-and-routing.svg" alt="Model discovery and routing">
+  <aside class="notes">
+    Lead with the headline: this platform is NOT pinned to a model string in an env
+    var. It calls /v1/models on boot and every 12h, classifies by tier, persists a
+    catalog to Cosmos, and an admin picks from a dropdown that populated itself.
+    The same resolver binds chat, Composer dry-runs and every scheduled agent —
+    there is no second place a model id is chosen.
+    Then the honest bit: a model matching no tier pattern lands in 'other' and auto
+    mode never selects it. The source comment says "this is exactly how
+    claude-fable-5 was missed."
+  </aside>
+</section>
+
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">The point</div>
+  <p class="big" style="max-width:21em;margin:.3em auto">
+    Model choice is <span style="color:var(--accent)">operational configuration</span>,
+    not a deployment.</p>
+  <p class="lead" style="margin-top:1em;color:var(--muted);max-width:24em;margin-left:auto;margin-right:auto">
+    A new frontier model ships → an admin picks it from a dropdown that populated itself.<br><br>
+    One degrades → the platform routes around it and recovers on its own.<br><br>
+    <strong style="color:#fff">Neither event needs an engineer.</strong></p>
+</section>
+
+<section data-background-color="#080b10" class="center">
+  <img class="diagram" src="diagrams/09-claude-sdk-anatomy.svg" alt="Claude Agent SDK anatomy">
+  <aside class="notes">
+    Spend time here — this is the slide an AI engineer in the audience came for.
+    The adapter boundary is the headline: one file imports the SDK, its helpers are
+    INJECTED into the tool server rather than imported by it, and tests drive a fake
+    async iterator so the whole runtime is testable with no network and no SDK.
+    Then the four gotchas — every one cost real days, and every one is the kind of
+    thing you only know from shipping.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Prompt architecture <span class="pill tech">technical</span></div>
+  <h2>One truth layer, two surfaces</h2>
+  <div class="cols wide-left">
+    <div>
+      <p style="font-size:.88em">The agent's system prompt is composed from the <strong>same exported blocks</strong> as the
+        chat prompt: company context · data-worlds dictionary · reference-resolution discipline ·
+        actuals-routing and methodology anchors.</p>
+      <p class="quote" style="margin-top:.5em">Editing one shared block updates both surfaces at once.
+        <strong>Drift is structurally impossible — not a discipline problem.</strong></p>
+      <p class="sub" style="margin-top:.6em">Runtime-composed and never persisted: existing agent definitions inherit an improved
+        grounding with <strong>no document migration</strong>, and no customer-authored brief is ever rewritten.</p>
+    </div>
+    <div>
+      <div class="card good"><h4>Two of the eight agent conduct rules</h4>
+        <strong>NAMES, NOT IDS.</strong> Never surface raw SAP customer numbers or internal keys in
+        narrative. Resolve to friendly names — or say explicitly that you couldn't.<br><br>
+        <strong>FRESHNESS IS PART OF THE TRUTH.</strong> State "Data as of &lt;date&gt;" from tool metadata,
+        and flag any source older than seven days as stale.</div>
+      <div class="card" style="margin-top:.45em"><h4>What's deliberately absent</h4>
+        Page awareness, UI context, follow-up framing — a scheduled report has no user to ask
+        and no page to look at.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ACT 5 · AGENT PLATFORM ══════════ -->
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">Act five</div>
+  <p class="huge">The agent platform</p>
+  <p class="lead" style="margin-top:.6em;color:var(--muted)">Chat answers the question you thought to ask.<br>
+    Agents answer the ones you should be asking.</p>
+</section>
+
+<section data-background-color="#080b10">
+  <figure>
+    <img class="shot tall" src="img/v3-agent-gallery.png" alt="Agent gallery">
+    <figcaption>Agents are <strong>typed Cosmos documents</strong>, not hardcoded prompts — browsable, cloneable, remixable.
+      Each card shows intent, the exact tool allowlist, cadence, next run and owner.</figcaption>
+  </figure>
+  <aside class="notes">
+    The tool allowlist printed on every card is a governance feature, not UI
+    decoration — users see exactly what an agent may touch before they run or clone it.
+  </aside>
+</section>
+
+<section data-background-color="#080b10" class="center">
+  <img class="diagram" src="diagrams/03-agent-framework.svg" alt="Agent framework">
+  <aside class="notes">
+    The framing that matters: the runtime is Anthropic's. Everything around it —
+    persistence, policy, citations, quotas, scheduling, validation — is the
+    engineering value. Spend most of your time on the hooks column.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Runtime <span class="pill tech">technical</span></div>
+  <h2>Five decisions that make agents safe</h2>
+  <div class="cols" style="font-size:.84em">
+    <div>
+      <div class="card"><h4>1 · Quarantine the SDK</h4>
+        <code>runtime.js</code> is the <strong>only</strong> file importing the Agent SDK. Types may not leak into
+        stores, hooks or ai-core. Swapping runtimes = one week, one file.</div>
+      <div class="card bad" style="margin-top:.42em"><h4>2 · Lock the built-in tool surface</h4>
+        <code>allowedTools</code> is an <em>approval</em> gate, not a <em>visibility</em> gate — so we also populate
+        <code>disallowedTools</code> with every SDK built-in, and reject definitions that smuggle one in.</div>
+      <div class="card bad" style="margin-top:.42em"><h4>3 · Enforce policy in the handler</h4>
+        The SDK can block a tool <em>call</em>; it cannot filter a tool's <em>output</em>.
+        BU data policy, cross-BU block and opt-in ABAC live in the handlers.</div>
+    </div>
+    <div>
+      <div class="card good"><h4>4 · Extract citations structurally</h4>
+        A PostToolUse hook pulls citations out of tool <em>returns</em> into the run document —
+        never parsed from the model's prose.</div>
+      <div class="card good" style="margin-top:.42em"><h4>5 · Validate before publishable</h4>
+        An independent oracle grades every generated report for grounding, scope and
+        publishability in strict JSON. Failures land in a <strong>Needs Review</strong> queue, not an inbox.</div>
+      <div class="card" style="margin-top:.42em"><h4>Plus</h4>
+        Per-BU and per-agent <strong>cost quotas</strong>, and an audit hook recording who created, ran,
+        changed or scheduled what.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    Repeat #3 — it's the one engineers argue with: anything you enforce only in a
+    system prompt is a suggestion.
+  </aside>
+</section>
+
+<section data-background-color="#080b10">
+  <figure>
+    <img class="shot tall" src="img/37-agent-report-weekly.png" alt="Filed agentic report">
+    <figcaption>Scheduled trigger · run duration · <strong>Succeeded</strong> + <strong>Validated</strong> badges ·
+      explicit BU-wide visibility scope · citation chips bound to date ranges · charts with a "how to read" note.<br>
+      This ran at 08:00 without anyone pressing a button.</figcaption>
+  </figure>
+  <aside class="notes">
+    Walk the badges left to right. "Validated" is the one that matters — an
+    independent oracle checked this for grounding and scope before it was allowed
+    into the inbox.
+  </aside>
+</section>
+
+<section data-background-color="#080b10" class="center">
+  <img class="diagram" src="diagrams/04-composer-v2.svg" alt="Composer V2">
+  <aside class="notes">
+    "Reuse the runtime, change the prompt and the allowlist" is the transferable
+    idea — teams routinely build a second chat stack for an authoring flow and
+    then maintain two forever. And note the LLM has no publish tool.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">The invariant that made it shippable</div>
+  <h2>V1-indistinguishability</h2>
+  <div class="cols wide-left">
+    <div>
+      <p style="font-size:.88em">Every agent published by Composer V2 must be <strong>byte-equivalent</strong> to one authored
+        through the old typed pipeline. A snapshot suite enforces it on every PR.</p>
+      <p style="font-size:.88em">Which means the scheduler, the runtime, the policy hooks and the report format
+        <strong>never had to learn that Composer V2 exists.</strong></p>
+      <p class="quote" style="margin-top:.6em">A new authoring UX shipped with zero blast radius on the execution path.</p>
+    </div>
+    <div>
+      <div class="card good"><h4>How to get invariants like this</h4>
+        Twelve rounds of independent adversarial agent review are traced in the plan document
+        before a line was written.<br><br>
+        The review didn't just find bugs — it deleted <strong>features</strong>. A parallel chat runtime,
+        a marker protocol, a separate MCP factory map: all proposed, all cut.</div>
+    </div>
+  </div>
+</section>
+
+<section data-background-color="#080b10" class="center">
+  <img class="diagram" src="diagrams/07-movement-pack.svg" alt="Movement Pack">
+  <aside class="notes">
+    Movement Pack is what made scheduled agents trustworthy. Ranking and
+    materiality are business rules; business rules belong in code. And the identity
+    slide at the bottom is the one senior engineers respect — everyone wants to
+    build the agent, almost nobody sequences the identity work first.
+  </aside>
+</section>
+
+<!-- ══════════ ACT 6 · GOVERNANCE ══════════ -->
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">Act six</div>
+  <p class="huge">Governance</p>
+  <p class="lead" style="margin-top:.6em;color:var(--muted)">The part that took longest and demos worst</p>
+</section>
+
+<section data-background-color="#080b10" class="center">
+  <img class="diagram" src="diagrams/06-authorization-and-oracle.svg" alt="Authorization and decision oracle">
+  <aside class="notes">
+    Authorization consumed more engineering time than any dashboard view, and it's
+    the only reason finance lets this near real numbers. The oracle is the bit I'm
+    proudest of: if you can express your authz rules as a pure function, you can
+    differentially test your real system against them forever.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Eleven admin capabilities</div>
+  <p class="tourhead">"Enterprise grade" is mostly this — the unglamorous half</p>
+  <div class="grid3">
+    <figure><img src="img/v3-admin-rbac.png" alt="RBAC">
+      <figcaption><b>RBAC</b>Role → permission mapping is data, not code. No deploy to change it.</figcaption></figure>
+    <figure><img src="img/v3-admin-agents.png" alt="AI Agents Policy">
+      <figcaption><b>AI Agents Policy</b>Per-BU data policy, cost quotas, permitted capability surface.</figcaption></figure>
+    <figure><img src="img/v3-admin-audit.png" alt="Audit logs">
+      <figcaption><b>Audit</b>Field-level deep diff. <strong>Denied writes are audited too.</strong></figcaption></figure>
+  </div>
+  <div class="grid3" style="margin-top:.55em">
+    <figure><img src="img/v3-admin-chatlogs.png" alt="AI chat logs">
+      <figcaption><b>AI Chat Logs</b>"What did the AI tell people?" is an auditable question, under a
+        documented envelope contract and retention policy.</figcaption></figure>
+    <figure><img src="img/v3-admin-etl.png" alt="ETL pipeline">
+      <figcaption><b>ETL Pipeline</b>Per-connector run history, import status, reconciliation state.</figcaption></figure>
+    <figure><img src="img/v3-admin-health.png" alt="System health">
+      <figcaption><b>System Health</b>Cosmos, ETL, AI probes, storage, and an Azure <strong>cost ledger</strong> — in-product.</figcaption></figure>
+  </div>
+  <p class="sub" style="margin-top:.5em">Full set: User Governance · Global Settings · Business Config &amp; Admin · Feedback Triage · RBAC ·
+    AI Agents Policy · Audit Logs · AI Chat Logs · Operational Logs · ETL Pipeline · System Health</p>
+  <aside class="notes">
+    Denied-write auditing matters more than it sounds: when an account manager
+    tries to edit outside their scope, the attempt is logged even though it's blocked.
+  </aside>
+</section>
+
+<!-- ══════════ ACT 7 · DISCIPLINE ══════════ -->
+<section data-background-color="#0c1017">
+  <div class="kicker">Testing <span class="pill tech">technical</span></div>
+  <h2>455 test files across five layers</h2>
+  <table>
+    <tr><th>Layer</th><th>What it protects</th></tr>
+    <tr><td><strong>Domain model</strong></td><td>The pure financial engine — margin, discount compounding, freight modes, break-even, projection</td></tr>
+    <tr><td><strong>API contract</strong></td><td>Request shape → response shape; permission gate → HTTP status. Named <code>*.contract.test.js</code> because they encode contracts other systems depend on</td></tr>
+    <tr><td><strong>Frontend component</strong></td><td>Not pixels — logic. Does the ETL tab appear for <code>sap_exporter</code>? Does the lock banner render when the FY is locked?</td></tr>
+    <tr><td><strong>Authorization harness</strong></td><td>Oracle vs. executor, golden + pairwise matrix, quarantine with expiry. Nightly at 02:00 UTC</td></tr>
+    <tr><td><strong>AI service</strong></td><td><code>ai-core</code> contracts, extraction, and SSE <strong>event-shape</strong> validation — the stream format is a contract the frontend depends on</td></tr>
+  </table>
+  <p class="sub" style="margin-top:.55em">I did not write these because I'm disciplined. I wrote them because of the next slide.</p>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Incidents became rules</div>
+  <h2>Every contract clause has a scar behind it</h2>
+  <table>
+    <tr><th>What happened</th><th>What it became</th></tr>
+    <tr><td>An AI agent "simplified" a component and silently deleted 200 lines</td>
+        <td><strong>NEVER OMIT CODE</strong> — in the agent contract, in capitals</td></tr>
+    <tr><td>One ESM import crossing a function-folder boundary crashed the <strong>entire</strong> Functions worker — not one endpoint, all of them</td>
+        <td><code>runtime-boundary.contract.test.js</code></td></tr>
+    <tr><td>Months later: contract code imported a workspace package that resolved in the monorepo but was <em>absent from the deployed package</em></td>
+        <td>Byte-parity mirroring + guard extended to reject deploy-absent imports</td></tr>
+    <tr><td>Eight formula bugs in one day, each producing plausible-looking numbers</td>
+        <td><code>financialModel.js</code> became a <strong>protected file</strong></td></tr>
+    <tr><td>Different scripts used different partition-key paths for the same containers</td>
+        <td>One path (<code>/pk</code>) everywhere; one config file as sole source of truth</td></tr>
+  </table>
+  <p class="sub" style="margin-top:.5em"><strong>Source resolution is not package resolution.</strong> The exact deployment artifact must load
+    against only its own production dependency graph before it ships.</p>
+  <aside class="notes">
+    This table is the heart of "contracts not prompts". Rules written in the
+    abstract get ignored. Rules written the day after an outage, naming the outage,
+    get followed — by humans and by agents.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">My favourite bug, because it is so quiet</div>
+  <div class="ascii" style="font-size:.52em;max-width:22em;margin:.5em auto;text-align:left">findDue(): WHERE c.enabled = true</div>
+  <p class="lead" style="margin-top:.8em;max-width:22em;margin-left:auto;margin-right:auto">
+    <code>AgentDefinitionV1</code> has <strong>no <code>enabled</code> field.</strong></p>
+  <p class="big" style="margin-top:.7em;max-width:21em;margin-left:auto;margin-right:auto">
+    The predicate never matched. <span style="color:var(--accent)">No scheduled agent run could ever fire.</span></p>
+  <p class="sub" style="margin-top:.9em">The weekly briefing was scheduled. The system reported no errors. Nothing happened.</p>
+  <p class="sub" style="margin-top:.5em"><strong style="color:#fff">There is no exception to catch when your filter silently matches nothing.</strong></p>
+  <aside class="notes">
+    This is the slide that generalises furthest. It's why the platform now asserts
+    the OBSERVABLE outcome — a run document exists — rather than trusting that the
+    code ran. Same class of error as the redaction bug I'll mention at the end.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Supply chain <span class="pill tech">technical</span></div>
+  <h2>Freeze the deploy graph</h2>
+  <div class="cols">
+    <div>
+      <ul class="tight" style="font-size:.84em">
+        <li>Deploys install the <strong>exact graph CI validated</strong> — <code>npm ci</code> against a committed lockfile</li>
+        <li>Any version move shows up as a reviewable lockfile diff <strong>in a PR</strong>, not invisibly at deploy time</li>
+        <li>Four surfaces — web host, <code>api</code>, <code>ai-service</code>, ETL Python — are separate deploy units, never co-mingled</li>
+      </ul>
+    </div>
+    <div>
+      <div class="card good"><h4>The guiding principles, verbatim</h4>
+        <strong>Pin what works; don't chase latest.</strong><br>
+        <strong>Subtraction beats migration</strong> — removing an unused dependency shrinks the
+        audit surface with zero functional risk.<br>
+        <strong>One surface, one wave, one PR.</strong></div>
+    </div>
+  </div>
+  <p class="sub" style="margin-top:.55em">That is the core defence against slopsquatting and surprise upgrades.</p>
+</section>
+
+<!-- ══════════ ACT 8 · HONEST ASSESSMENT ══════════ -->
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">Act eight</div>
+  <p class="huge">What I got wrong</p>
+  <p class="lead" style="margin-top:.6em;color:var(--muted)">A self-assessment that only lists strengths isn't one</p>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">June 2026 — formal AI/agentic maturity audit</div>
+  <h2>Level 3 of 5</h2>
+  <div class="cols wide-left">
+    <div>
+      <table style="font-size:.54em">
+        <tr><th>Dimension</th><th style="text-align:center">Now</th><th style="text-align:center">Target</th></tr>
+        <tr><td>Grounding &amp; provenance</td><td class="num scoregood">4</td><td class="num">4</td></tr>
+        <tr><td>Tool use &amp; capability management</td><td class="num scoregood">4</td><td class="num">4</td></tr>
+        <tr><td>Human-in-the-loop &amp; clarification</td><td class="num scoregood">4</td><td class="num">4</td></tr>
+        <tr><td>Agent runtime &amp; execution model</td><td class="num">3</td><td class="num">4</td></tr>
+        <tr><td>Model orchestration &amp; reliability</td><td class="num">3</td><td class="num">4</td></tr>
+        <tr><td>Guardrails, safety &amp; governance</td><td class="num">3</td><td class="num">4</td></tr>
+        <tr><td><strong>Evaluation (agent output quality)</strong></td><td class="num scorebad">2</td><td class="num">4</td></tr>
+        <tr><td><strong>Observability &amp; telemetry</strong></td><td class="num scorebad">2</td><td class="num">4</td></tr>
+        <tr><td><strong>Business context &amp; memory</strong></td><td class="num scorebad">2</td><td class="num">4</td></tr>
+        <tr><td><strong>Multi-agent &amp; durable workflows</strong></td><td class="num scorebad">2</td><td class="num">3</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="card"><h4>How it was produced</h4>
+        A multi-agent workflow mapped 12 AI subsystems against ~60 primary sources on the
+        2025–26 state of the art — then <strong>adversarially verified every claimed gap back
+        against the codebase</strong>.<br><br>
+        <strong>13 of 26 gap-claims turned out to be overstated.</strong> The code already had a
+        partial implementation, or the "gap" was a deliberate documented decision.</div>
+      <div class="card bad" style="margin-top:.45em"><h4>The sharpest criticism in it</h4>
+        A recurring <strong>"documented-but-not-enforced"</strong> risk. Several controls are described
+        in contracts but not mechanically verified.<br><br>
+        <em>Writing the rule is the easy half.</em></div>
+    </div>
+  </div>
+  <aside class="notes">
+    Deliver this slide without defensiveness — it's the one that earns credibility.
+    The "13 of 26 overstated" line matters: it shows the audit itself was audited.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017" class="center">
+  <p class="big" style="max-width:23em;margin:.3em auto">
+    3–4 on the hard, differentiating dimensions.<br>
+    <span style="color:var(--bad)">2 on the operational hygiene</span> the industry standardised in 2025.
+  </p>
+  <p class="lead" style="margin-top:1em;color:var(--muted);max-width:22em;margin-left:auto;margin-right:auto">
+    Most enterprise teams are the mirror image:<br>decent ops tooling bolted onto shallow grounding.</p>
+  <aside class="notes">
+    This is the most quotable slide in the deck. It's also genuinely how I'd
+    describe the trade-off I made — I built the hard part first, on purpose.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">The backlog</div>
+  <h2>What's next</h2>
+  <div class="cols3">
+    <div class="card"><h4>Near — close the hygiene gap</h4>
+      · <strong>Agent-output evals.</strong> World-class <em>contract</em> tests, zero <em>quality</em> evals. Golden questions, scored grounding + citation coverage, in CI.<br>
+      · <strong>OpenTelemetry <code>gen_ai.*</code> spans.</strong> Bespoke correlation logging works; it doesn't interop.<br>
+      · <strong>Durable execution</strong> for the interactive chat loop.<br>
+      · <strong>Turn declared controls into enforced ones.</strong></div>
+    <div class="card blue"><h4>Medium — product</h4>
+      · <strong>Composer V3.</strong> Invert the canvas: artefact as viewport, chat as side rail. Plus a lineage chip, plan-mode preview and per-section execution badges.<br>
+      · <strong>Material Cost Service.</strong> A cost needs an auditable <em>basis, effective date, coverage and evidence</em> — not just a number.<br>
+      · <strong>Stock beyond <code>gross_buildable</code></strong> — reservation-aware free stock.<br>
+      · <strong>A memory layer.</strong> There is none today.</div>
+    <div class="card good"><h4>Long — the big one</h4>
+      <strong>Intersection Intelligence.</strong> A map-first digital twin of every road junction in South Africa — signalised, roundabout, stop-controlled — with confidence scores and a proprietary overlay of deployed controller make/model.<br><br>
+      Replaces municipality-level market analysis (aggregate, stale) with intersection-level reality (spatial, refreshable).<br><br>
+      86 locked design decisions.</div>
+  </div>
+  <aside class="notes">
+    On Material Cost Service: today a product line item carries one unit-cost value
+    that can't distinguish latest purchase price, received price, stock valuation
+    and BOM roll-up. First building block — SAP price-control indicator, S=standard,
+    V=moving average — is already in production.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">The design decision I'd want a CTO to notice</div>
+  <p class="big" style="max-width:22em;margin:.3em auto">
+    The most ambitious thing on the roadmap was designed, from the first line,
+    to be <span style="color:var(--accent)">switchable off.</span></p>
+  <p class="sub" style="margin-top:1.1em;max-width:26em;margin-left:auto;margin-right:auto">
+    Intersection Intelligence ships as a <strong>standalone Fastify service on its own App Service plan</strong>,
+    mirroring the AI service — because, in the owner's words:
+    <em>"if it does not work, it should be switched off without breaking the core of the app."</em></p>
+  <p class="sub" style="margin-top:.7em">A kill-switch ladder, its own operator console, and a proxy line in the host that can simply stop resolving.</p>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">…and then I retried it, and found a real bug</div>
+  <h2>The trust machinery worked. The engineering had a hole.</h2>
+  <div class="cols">
+    <div>
+      <div class="card"><h4>What happened</h4>
+        I re-ran the Jira question for this edition. The tools timed out <strong>again</strong> — three
+        attempts out of three.<br><br>
+        This time it degraded <em>better</em>: it fell back to the Roadmap page KPIs (same live Jira data,
+        already in Cosmos), gave a real quantified answer on throughput and WIP, and refused only
+        the part it couldn't source.</div>
+      <p class="quote" style="margin-top:.5em;font-size:.82em">"22 items have been stuck for more than 90 days. I attempted to pull the ranked
+        list but the Jira query timed out this turn — I don't have the individual items,
+        <strong>so I won't guess at which ones are oldest.</strong>"</p>
+    </div>
+    <div>
+      <div class="card bad"><h4>Root cause</h4>
+        <code>TOOL_TIMEOUT_MS = 5000</code> is the default tool budget.<br><br>
+        Production tools were recognised as slow and given a 30s override.
+        <strong>No Jira tool was ever added to that map</strong> — so a cross-internet call to
+        Atlassian Cloud gets the same five seconds as an in-region Cosmos point read.</div>
+      <div class="card good" style="margin-top:.45em"><h4>The fix isn't a bigger number</h4>
+        Derive the timeout from a declared <code>executionClass</code> on each tool, and add a contract
+        test asserting every tool making an outbound non-Azure call is declared
+        <code>external-api</code>.<br><br>
+        <strong>That turns a silent 5s default into a build failure.</strong></div>
+    </div>
+  </div>
+  <aside class="notes">
+    Deliver this without defensiveness — it's the most credible slide in the deck.
+    Two true things at once: the platform named its failure and refused to invent an
+    answer; and the engineering underneath had a hole in it.
+    Note the shape it shares with the model-tier bug: an OPT-IN REGISTRY that new
+    items must be added to, where forgetting fails silently. Written up in
+    docs/bugs/2026-08-08-jira-tools-timeout-5s-default.md.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">A pattern worth naming</div>
+  <p class="big" style="max-width:22em;margin:.3em auto">
+    Beware the <span style="color:var(--accent)">opt-in registry.</span></p>
+  <p class="lead" style="margin-top:1em;color:var(--muted);max-width:25em;margin-left:auto;margin-right:auto">
+    Two of this platform's real bugs are the same shape:</p>
+  <div class="cols" style="max-width:44em;margin:.9em auto 0">
+    <div class="card bad"><h4>The missed model tier</h4>
+      A model matching no tier pattern lands in <code>other</code> — and auto mode never selects it.
+      <em>"…this is exactly how claude-fable-5 was missed."</em></div>
+    <div class="card bad"><h4>The Jira timeout</h4>
+      A tool absent from the override map silently inherits a 5s budget meant for
+      in-region reads.</div>
+  </div>
+  <p class="sub" style="margin-top:.9em;max-width:26em;margin-left:auto;margin-right:auto">
+    <strong style="color:#fff">Derive from a declared property; test the derivation.</strong>
+    A map that new items must be added to will eventually not be.</p>
+</section>
+
+<!-- ══════════ ACT 10 · WHAT IT TAUGHT ME ══════════ -->
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">Act ten</div>
+  <p class="huge">What building this<br>actually taught me</p>
+  <p class="lead" style="margin-top:.6em;color:var(--muted)">Evidence, not adjectives</p>
+  <aside class="notes">
+    Frame honestly: exposure to AI is cheap in 2026 — every company has run a pilot.
+    What's scarce is people who have carried an agentic system into production
+    against real money and real auditors, and can say which decisions were
+    load-bearing and which were fashion.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">The claim</div>
+  <h2>Not "I know about AI agents"</h2>
+  <p class="big" style="max-width:26em;margin:.5em 0">
+    I have made <span style="color:var(--accent)">every architectural decision</span> that determines whether an
+    enterprise agent platform is trustworthy — and I can show you the specific incident that taught me each one.</p>
+  <div class="cols" style="margin-top:.8em">
+    <div class="card bad"><h4>What a CV usually claims</h4>
+      "Led AI initiatives" · "delivered a GenAI pilot" · "familiar with RAG and agents".<br><br>
+      <em>Exposure. Cheap in 2026.</em></div>
+    <div class="card good"><h4>What this is instead</h4>
+      A production system with named failure modes, a published maturity score, and a
+      bug report I wrote about my own platform three slides ago.</div>
+  </div>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Competency map <span class="pill exec">exec</span></div>
+  <h2>Ten things this platform is evidence of</h2>
+  <table style="font-size:.5em">
+    <tr><th>Competency</th><th>The evidence</th></tr>
+    <tr><td><strong>AI strategy under constraint</strong></td><td>Bridge around an un-migratable ERP instead of a seven-figure programme; single-digit monthly DB cost</td></tr>
+    <tr><td><strong>Knowing when not to use the fashionable pattern</strong></td><td>Refused RAG for numbers; cut a sub-agent swarm, a custom DSL, a parallel data plane and a second chat runtime</td></tr>
+    <tr><td><strong>Grounding &amp; the economics of trust</strong></td><td>Structural citation extraction; provenance + confidence + model on every answer; it refuses when tools fail</td></tr>
+    <tr><td><strong>Agentic architecture &amp; vendor risk</strong></td><td>One file imports the SDK; swap cost stated as ~1 week; four SDK gotchas known from being cut by them</td></tr>
+    <tr><td><strong>Model portfolio management</strong></td><td>Auto-discovery, tier policy, health circuit breaker with demotion and recovery — one resolver for the whole platform</td></tr>
+    <tr><td><strong>Governance that is enforced, not declared</strong></td><td>Policy in tool handlers, not prompts; built-ins denied by construction; quotas, audit, validation oracle</td></tr>
+    <tr><td><strong>Deterministic / probabilistic decomposition</strong></td><td>Ranking, thresholds, scope and identity are code; identity resolution shipped <em>before</em> the agent feature</td></tr>
+    <tr><td><strong>Evaluating your own programme honestly</strong></td><td>Level 3/5 published with the 2s visible; 13 of 26 gap-claims adversarially disproved</td></tr>
+    <tr><td><strong>AI-augmented delivery as an operating model</strong></td><td>1,184 commits solo; leverage came from contracts, not prompting; two-model pairing with human arbitration</td></tr>
+    <tr><td><strong>Product judgement in an AI surface</strong></td><td>The LLM has no publish tool; V1-indistinguishability let a new UX ship with zero blast radius</td></tr>
+  </table>
+  <aside class="notes">
+    Don't read this table aloud. Land three: policy-in-handlers, model portfolio
+    management, and the honest self-assessment. Say the full map is in the companion
+    document.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">The one-paragraph version</div>
+  <p class="lead" style="max-width:30em;line-height:1.4">
+    I built and operate a production agentic platform over a legacy ERP: <strong>83 typed tools</strong>,
+    <strong>75 agent capabilities</strong>, a scheduled agent framework on the Claude Agent SDK with
+    <strong>policy enforced at the tool-handler boundary</strong>, structural citation extraction, an
+    independent validation oracle, per-tenant cost quotas, <strong>model auto-discovery with a health
+    circuit breaker</strong>, and a three-layer authorization model differentially tested by a decision
+    oracle every night.</p>
+  <p class="lead" style="margin-top:.7em;max-width:30em;line-height:1.4;color:var(--accent)">
+    I can tell you which of those decisions were load-bearing, which were fashion, and which one I
+    would sequence differently — because I have the incident behind each.</p>
+</section>
+
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">For anyone hiring in this space</div>
+  <p class="huge">The competency map</p>
+  <p class="lead" style="margin-top:.6em;color:var(--muted)">Self-taught, self-rated — and deliberately not all fives</p>
+  <aside class="notes">
+    Say the honest framing out loud: a matrix where everything is a 5 tells a
+    recruiter nothing. The 1s and 2s are what make the 5s believable — and they're
+    also the things I'd want to be hired to go and fix.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Competency map <span class="pill hot">1 = aware · 3 = working · 5 = shipped &amp; operating in production</span></div>
+  <h2>Where I actually am</h2>
+  <div class="skillgrid">
+    <div class="skillcol">
+      <div class="skillhead">Core agentic engineering</div>
+      <div class="skill"><span class="sn">Prompt &amp; system-prompt architecture</span><span class="bar"><i style="width:100%"></i></span><b>5</b></div>
+      <div class="skill"><span class="sn">Tool / function-calling design</span><span class="bar"><i style="width:100%"></i></span><b>5</b></div>
+      <div class="skill"><span class="sn">Conversational chat engine (multi-turn, SSE)</span><span class="bar"><i style="width:100%"></i></span><b>5</b></div>
+      <div class="skill"><span class="sn">Agent harness &amp; orchestration</span><span class="bar"><i style="width:100%"></i></span><b>5</b></div>
+      <div class="skill"><span class="sn">Claude Agent SDK (production)</span><span class="bar"><i style="width:100%"></i></span><b>5</b></div>
+      <div class="skill"><span class="sn">MCP — Model Context Protocol</span><span class="bar"><i style="width:80%"></i></span><b>4</b></div>
+      <div class="skill"><span class="sn">Multi-agent / durable workflows</span><span class="bar amber"><i style="width:40%"></i></span><b>2</b></div>
+    </div>
+    <div class="skillcol">
+      <div class="skillhead">Trust, safety &amp; operations</div>
+      <div class="skill"><span class="sn">Grounding, citations &amp; provenance</span><span class="bar"><i style="width:100%"></i></span><b>5</b></div>
+      <div class="skill"><span class="sn">AI governance &amp; guardrails</span><span class="bar"><i style="width:80%"></i></span><b>4</b></div>
+      <div class="skill"><span class="sn">Security &amp; authorization for AI</span><span class="bar"><i style="width:100%"></i></span><b>5</b></div>
+      <div class="skill"><span class="sn">Model routing &amp; multi-model ops</span><span class="bar"><i style="width:80%"></i></span><b>4</b></div>
+      <div class="skill"><span class="sn">Cost control / FinOps for AI</span><span class="bar"><i style="width:80%"></i></span><b>4</b></div>
+      <div class="skill"><span class="sn">Evals &amp; output-quality measurement</span><span class="bar amber"><i style="width:40%"></i></span><b>2</b></div>
+      <div class="skill"><span class="sn">AI observability (OTel <code>gen_ai.*</code>)</span><span class="bar amber"><i style="width:40%"></i></span><b>2</b></div>
+    </div>
+    <div class="skillcol">
+      <div class="skillhead">Platform, data &amp; delivery</div>
+      <div class="skill"><span class="sn">Data engineering for AI (ETL, semantics)</span><span class="bar"><i style="width:100%"></i></span><b>5</b></div>
+      <div class="skill"><span class="sn">AI product design &amp; explainability UX</span><span class="bar"><i style="width:100%"></i></span><b>5</b></div>
+      <div class="skill"><span class="sn">AI-augmented software delivery</span><span class="bar"><i style="width:100%"></i></span><b>5</b></div>
+      <div class="skill"><span class="sn">Cloud architecture (Azure, serverless)</span><span class="bar"><i style="width:80%"></i></span><b>4</b></div>
+      <div class="skill"><span class="sn">RAG / vector retrieval</span><span class="bar amber"><i style="width:40%"></i></span><b>2</b></div>
+      <div class="skill"><span class="sn">Memory / long-horizon context</span><span class="bar amber"><i style="width:40%"></i></span><b>2</b></div>
+      <div class="skill"><span class="sn">Fine-tuning / model training</span><span class="bar red"><i style="width:20%"></i></span><b>1</b></div>
+    </div>
+  </div>
+  <p class="sub" style="margin-top:.55em">Every rating above is defended by a named artefact in this deck. The next slide shows the evidence for the fives —
+    and why three of these are deliberately low.</p>
+  <aside class="notes">
+    Don't read the grid. Say: "greens are things I've shipped and now operate;
+    ambers are known gaps that are on my backlog with named fixes; the red is
+    honest — I have not trained a model."
+    If someone asks about RAG being a 2: I refused it deliberately for structured
+    financial data and can explain exactly why — but I won't claim depth I don't have.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">The evidence behind the fives</div>
+  <h2>Each rating maps to something in this deck</h2>
+  <table style="font-size:.5em">
+    <tr><th>Competency</th><th>What backs it</th></tr>
+    <tr><td><strong>Prompt &amp; system-prompt architecture</strong></td><td>"One truth layer, two surfaces" — chat and agent prompts composed from shared blocks so drift is structurally impossible; 8 non-negotiable agent conduct rules</td></tr>
+    <tr><td><strong>Tool / function-calling design</strong></td><td>83 typed tools across 13 groups, two-layer routing (chat profile / tool profile), hard budgets: 15 calls, 10 iterations, 300s ceiling</td></tr>
+    <tr><td><strong>Conversational chat engine</strong></td><td>Built from scratch: multi-turn, SSE streaming with a frozen event contract, 3-layer cache, abort/retry, deterministic clarification gate</td></tr>
+    <tr><td><strong>Agent harness &amp; orchestration</strong></td><td>Scheduled agents in production: definitions as typed documents, scheduler, run store, citations, quotas, validation oracle, Needs-Review queue</td></tr>
+    <tr><td><strong>Claude Agent SDK</strong></td><td>One-file adapter boundary; <code>disallowedTools</code> defence in depth; PreToolUse/PostToolUse/Stop hooks; four SDK gotchas known from being cut by them</td></tr>
+    <tr><td><strong>Grounding &amp; provenance</strong></td><td>Structural citation extraction from tool returns; snapshot-dated citation chips; provenance + confidence + model on every answer; it refuses when tools fail</td></tr>
+    <tr><td><strong>Security &amp; authorization for AI</strong></td><td>3-layer authz enforced in tool handlers, not prompts; 12 roles / 34 permissions; decision oracle differentially testing it nightly</td></tr>
+    <tr><td><strong>Data engineering for AI</strong></td><td>10 SAP connectors with no-loss reconciliation; 170-entry insight catalog as a semantic layer the model reads</td></tr>
+    <tr><td><strong>AI product design &amp; explainability</strong></td><td>Insight Explainer drawer (what / sources / how-calculated / "Ask AI About This"); confidence chips; clarification UX</td></tr>
+    <tr><td><strong>AI-augmented software delivery</strong></td><td>1,184 commits solo in 8 months; contracts-not-prompts operating model; two-model pairing with human arbitration</td></tr>
+  </table>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">And the honest ones</div>
+  <h2>Why three of those are twos — and one is a one</h2>
+  <div class="cols">
+    <div>
+      <div class="card bad"><h4>Evals &amp; output-quality measurement — 2</h4>
+        World-class <em>contract</em> tests; until recently zero <em>quality</em> evals. I built the hard part
+        first and left the layer the industry standardised in 2025.
+        <strong>It is the top item on my backlog</strong>, and the first thing I'd build at a new company.</div>
+      <div class="card bad" style="margin-top:.4em"><h4>AI observability — 2</h4>
+        Solid bespoke correlation logging; no OpenTelemetry <code>gen_ai.*</code> spans, so it doesn't
+        interoperate with anything.</div>
+    </div>
+    <div>
+      <div class="card bad"><h4>RAG / vector retrieval — 2</h4>
+        I <strong>deliberately refused</strong> RAG for structured financial data and can defend that
+        decision in detail — but I won't claim depth I don't have. If your problem is
+        genuinely document search, hire someone with a 5 here.</div>
+      <div class="card bad" style="margin-top:.4em"><h4>Fine-tuning / model training — 1</h4>
+        I have not trained or fine-tuned a model. My leverage has been architecture around
+        frontier models, not producing them.</div>
+    </div>
+  </div>
+  <p class="sub" style="margin-top:.55em"><strong style="color:#fff">A matrix with no low scores is a marketing document.</strong>
+    These four are exactly what I'd want to be hired to go and close.</p>
+  <aside class="notes">
+    This slide does more for credibility than every 5 combined. Deliver it flatly,
+    without apology — it's a statement of where the work is, not a confession.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">If you're hiring</div>
+  <p class="big" style="max-width:24em;margin:.3em auto">
+    Everything on the previous slides is <span style="color:var(--accent)">self-taught</span>,
+    built in production, against real money — and documented well enough that you can audit the claims.</p>
+  <div class="cols" style="max-width:46em;margin:1em auto 0">
+    <div class="card good"><h4>Best fit</h4>
+      Head of AI · VP AI Engineering · AI Platform / Applied AI Architect ·
+      Chief AI Officer (mid-market) · CTO (mid-market)</div>
+    <div class="card"><h4>What I'd bring in month one</h4>
+      A benchmark of your AI estate against the current state of the art, with an
+      evidence-cited, prioritised backlog — the same exercise I ran on my own platform,
+      which disproved 13 of its own 26 findings.</div>
+  </div>
+  <aside class="notes">
+    Close the section by inviting the conversation explicitly — this deck is going on
+    LinkedIn, so say the thing a reader needs permission to do: get in touch.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">The two interview questions I'd ask myself</div>
+  <div class="cols">
+    <div>
+      <div class="card"><h4>"What would you do differently?"</h4>
+        Sequence <strong>evals before the agent framework</strong>, not after. I have world-class
+        <em>contract</em> tests and, until recently, zero <em>output-quality</em> evals — I built the hard
+        part first and left the hygiene layer the industry standardised in 2025.<br><br>
+        And identity resolution even earlier than I did.</div>
+    </div>
+    <div>
+      <div class="card bad"><h4>"What is the risk in what you built?"</h4>
+        Single-instance assumptions in the model catalog and health breaker · no memory layer ·
+        a hand-rolled, non-durable interactive chat loop · and the
+        <strong>"documented-but-not-enforced"</strong> gap.<br><br>
+        Every one is on the backlog with a named fix — and I'd rather be asked about them than
+        have them found.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    Answering these before you're asked is the move. It converts "can we trust this
+    person's judgement" from an open question into a demonstrated one.
+  </aside>
+</section>
+
+<!-- ══════════ ACT 9 · CLOSE ══════════ -->
+<section data-background-color="#0c1017">
+  <div class="kicker">What actually changed</div>
+  <h2>Outcomes</h2>
+  <div class="cols">
+    <div>
+      <div class="card good"><h4>Speed of answer</h4>Emailed spreadsheets → a live operating picture.
+        SAP export to dashboard in <strong>~30 seconds</strong>.</div>
+      <div class="card good" style="margin-top:.42em"><h4>Speed of decision</h4>Budget revisions were a quarterly
+        event. Now a director drags a slider and sees PBT move in <strong>under 16ms</strong>.</div>
+      <div class="card good" style="margin-top:.42em"><h4>Breadth</h4>One question surface across engineering,
+        manufacturing, stock, procurement, contracts and finance.</div>
+    </div>
+    <div>
+      <div class="card good"><h4>Questions nobody had time to ask</h4>Scheduled agents produce cited briefings
+        at 08:00 — margin drift, customer health, debtor exposure — without anyone requesting them.</div>
+      <div class="card good" style="margin-top:.42em"><h4>Cost</h4>Single-digit monthly database spend.
+        Built for <strong>a fraction of one SAP consulting engagement.</strong></div>
+      <div class="card good" style="margin-top:.42em"><h4>Trust</h4>The system says "I don't know" when its tools
+        fail — which is why people believe it when it doesn't.</div>
+    </div>
+  </div>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">If you take eight things</div>
+  <h2>Lessons</h2>
+  <ol class="tight" style="font-size:.76em">
+    <li><strong>Build the calculation engine first</strong>, as a pure function, and test it before you write a component.</li>
+    <li><strong>Give agents tools, not documents.</strong> For structured financial data a typed tool over a partition-targeted query wins on every axis.</li>
+    <li><strong>Enforce policy where the data is, not where the prompt is.</strong> Anything enforced only in a system prompt is a suggestion.</li>
+    <li><strong>Keep the deterministic layer deterministic.</strong> Ranking, thresholds, scope and identity are code. Let the model do the writing.</li>
+    <li><strong>Sequence the boring dependency first.</strong> Identity before Movement Pack; Movement Pack before agents.</li>
+    <li><strong>Prove conservation before you publish.</strong> No-loss reconciliation at the boundary beats reconciliation reports afterwards.</li>
+    <li><strong>A silent no-op is worse than a crash.</strong> Assert the observable outcome, not that your code ran.</li>
+    <li><strong>Write contracts, not prompts.</strong> Every rule came from a specific incident — which is exactly why agents follow them.</li>
+  </ol>
+  <aside class="notes">
+    Slow down. This is the slide people photograph.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">Method note — optional, drop if short on time</div>
+  <h2>How these screenshots were made</h2>
+  <div class="cols wide-left">
+    <div>
+      <p style="font-size:.8em">Every image is the <strong>live production system with real data on screen</strong>. A redaction
+        layer is injected before capture; capture <strong>loops</strong> — redact, verify, repeat — and writes a PNG only once the page verifies clean.</p>
+      <div class="card bad"><h4>It failed eight times first</h4>
+        <strong>1.</strong> The checker shared the redactor's blind spot — both scanned <em>leaf elements</em>, so prose in
+        <code>&lt;li&gt;&lt;strong&gt;Facts:&lt;/strong&gt;…&lt;/li&gt;</code> passed through <em>while the check said "clean"</em>.<br>
+        <strong>2.</strong> Pattern matching was the wrong model — an answer named five customers in prose with
+        <em>no digits</em>, so nothing matched.<br>
+        <strong>3.</strong> I fixed the leaf-only bug, then immediately rebuilt it in the new pass.<br>
+        <strong>4–6.</strong> Form values aren't text nodes · names that exist only in the page's own data ·
+        tenant identifiers that look like ordinary product codes.<br>
+        <strong>7.</strong> The 25-character prose threshold never described the risk — a <strong>17-character Jira title</strong>
+        in a model-rendered table slipped under it.<br>
+        <strong>8.</strong> <em>Verified clean, captured dirty.</em> A clipped capture resizes the surface, Recharts re-renders its axes,
+        and real currency was painted into the PNG <strong>after</strong> the check passed. The run logged <code>$=0</code>. The file leaked.</div>
+    </div>
+    <div>
+      <div class="card good"><h4>The rule that worked</h4>
+        <strong>You cannot enumerate what sensitive text looks like.</strong><br><br>
+        So AI output became sensitive <em>by default</em> — and, after failure 8,
+        <strong>the assertion straddles the capture</strong>: shoot, re-verify, re-shoot if the page moved,
+        so the number reported describes <em>the file on disk</em> rather than the DOM a moment earlier.</div>
+      <p class="quote" style="margin-top:.6em;font-size:.8em">A test that agrees with your bug is worse than no test —
+        it converts an unknown risk into false confidence.</p>
+      <p class="sub" style="margin-top:.5em">Same class of error as the silent scheduler no-op. My redactor and my verifier were
+        written by the same mind, from the same mental model, on the same afternoon — so they failed together.</p>
+    </div>
+  </div>
+</section>
+
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">The first ten minutes of every conversation</div>
+  <h1 style="font-size:1.5em">FAQ</h1>
+  <div class="rule" style="max-width:440px;margin:.9em auto"></div>
+  <p class="lead">Four decisions people push back on —<br>and the honest answer to each.</p>
+  <p class="sub" style="margin-top:.9em">LangChain · one model provider · a document database · no evals</p>
+  <aside class="notes">
+    Signal that none of these have a defensive answer. If you get defensive here you lose the room;
+    if you name the cost of your own decision before they do, you own it.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">FAQ 1 <span class="pill tech">most common question</span></div>
+  <h2>"Why didn't you just use LangChain?"</h2>
+  <table>
+    <tr><th>Product</th><th>What it gives you</th><th>What I did instead</th><th>Verdict</th></tr>
+    <tr><td><strong>LangChain</strong> (OSS)</td><td>Model / tool / prompt abstractions across providers</td><td>Anthropic Messages API + frozen <code>AiProviderTransport</code></td><td>Value is portability. I chose one provider.</td></tr>
+    <tr><td><strong>LangGraph</strong></td><td>Graph orchestration, checkpointing, durable execution</td><td>Claude Agent SDK (agents) + own loop (chat)</td><td class="scorebad"><strong>Genuinely competitive.</strong> Better durability than mine.</td></tr>
+    <tr><td><strong>LangSmith</strong></td><td>Tracing, datasets, trajectory evals, prompt versioning</td><td>Bespoke correlationId log · 1,100+ contract tests · <strong>zero output evals</strong></td><td class="scoregood"><strong>Strongest case to adopt.</strong></td></tr>
+    <tr><td><strong>LangGraph Platform</strong></td><td>Managed agent deployment and persistence</td><td>Fastify on an App Service I already pay for</td><td>One region, twelve users.</td></tr>
+    <tr><td><strong>LangMem</strong></td><td>Long-term agent memory</td><td>No memory layer (scored <strong>2/5</strong>)</td><td>Real gap — not obviously a framework problem.</td></tr>
+  </table>
+  <p class="sub" style="margin-top:.5em">Primary reason, stated first: <strong>the point was to learn this from the ground up.</strong>
+    A framework teaches you its opinion about a tool loop, not what a tool loop is.</p>
+  <aside class="notes">
+    Lead with the learning goal — it's the true reason and it disarms the question.
+    Then show you can defend it architecturally anyway. Do NOT rubbish LangChain;
+    naming LangGraph as genuinely better on durability is what makes the rest credible.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">FAQ 1 continued</div>
+  <h2>The agent loop was never the hard part</h2>
+  <div class="cols">
+    <div>
+      <div class="card good"><h4>What the SDK gave me</h4>
+        Tool loop · sub-agents · hooks · permissions · sessions.<br><br>
+        The research note that locked this in: the SDK <em>"saves us from rebuilding the runtime / orchestration layer"</em> —
+        v0 became <strong>days of work, not weeks</strong>.</div>
+    </div>
+    <div>
+      <div class="card blue"><h4>What no framework could do for me</h4>
+        ABAC enforced <strong>inside tool handlers</strong>, before a row reaches the model ·
+        the <strong>Movement Pack</strong> so the model narrates rather than calculates ·
+        a <strong>170-entry governed insight catalog</strong> ·
+        SAP reconciliation that refuses to publish on row-count drift.</div>
+    </div>
+  </div>
+  <p class="quote" style="margin-top:.7em">A framework would have abstracted the easy 20% and left the hard 80% exactly where it was.</p>
+  <div class="cols" style="margin-top:.6em">
+    <div><p class="sub"><strong>Frugality is a real constraint, not a flourish.</strong> ~12 internal users on a shoestring.
+      LangSmith Plus is <strong>$39/seat/month + trace overages</strong>; a typical LangSmith + LangGraph Platform setup lands
+      <strong>$175–375/month</strong> before model spend.</p></div>
+    <div><p class="sub"><strong>Where I change my mind — and it's the same place twice.</strong> My two lowest scores are
+      <strong>evals 2/5</strong> and <strong>observability 2/5</strong>. That is exactly LangSmith's core competence.
+      The move is to <strong>buy the gap, not the religion</strong>: adopt an eval/trace layer against interfaces that are
+      already frozen and contract-tested.</p></div>
+  </div>
+  <aside class="notes">
+    The $ figures matter to a CFO in the room and they show you actually costed it.
+    End on "buy the gap, not the religion" — it's the line that lands.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">FAQ 2 <span class="pill hot">the lock-in question</span></div>
+  <h2>"Why go all-in on Claude? Where's the router?"</h2>
+  <div class="cols wide-left">
+    <div>
+      <div class="card"><h4>There is a seam — not a router</h4>
+        <code>AiProviderTransport</code> is a <strong>frozen, asserted contract</strong>: the orchestration layer talks to
+        <em>a provider</em>, not to Anthropic. <code>providerCapabilities.js</code> says so in its own header — adding OpenAI or Gemini
+        <em>"would add sibling files with the same <code>classify()</code> / <code>resolveThinkingConfig()</code> contract."</em><br><br>
+        <strong>One implementation exists.</strong> The audit scores this <strong>3/5</strong> and names it:
+        <em>"sophisticated single-provider routing; no cross-provider failover."</em></div>
+      <div class="card good" style="margin-top:.5em"><h4>What I do have inside the bet</h4>
+        Model <strong>auto-discovery every 12h</strong> against <code>/v1/models</code> · tier classification ·
+        a <strong>health circuit breaker that demotes and recovers automatically</strong>.
+        Failover exists — <em>within the family, not across vendors</em>.</div>
+    </div>
+    <div>
+      <p style="font-size:.8em">This is a <strong>resourcing decision, not an architectural belief</strong>.
+        A provider-abstraction layer is a tax paid daily on every feature, against a risk that hasn't materialised.
+        One person, running an entire business: <strong>you pick a platform and move</strong>.</p>
+      <p style="font-size:.8em">So I went <strong>vertically integrated</strong> — not just the LLM API, but the
+        <strong>Agent SDK and the MCP tool surface</strong>. That verticality is why the agent framework took days.</p>
+      <p class="quote">If Anthropic goes down, the AI degrades. The platform doesn't — every number comes from Cosmos.
+        The model only narrates.</p>
+      <p class="sub">Revisit triggers: sustained availability problems · a pricing shift · a capability that exists only elsewhere.
+        The seam is there so that day is an implementation, not a rewrite.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    Never overclaim here — an astute CTO will ask to see the second adapter. Say "seam, not router" out loud.
+    The strongest line is the last one: the platform's correctness does not depend on the model being up.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">FAQ 3 <span class="pill exec">the architect's question</span></div>
+  <h2>"Why Cosmos DB and not a relational database?"</h2>
+  <p class="sub" style="margin-top:-.3em">It began as a cost decision on a shoestring proof of concept — and stayed for engineering reasons.</p>
+  <div class="cols">
+    <div>
+      <ul class="tight" style="font-size:.78em">
+        <li><strong>Schema evolution without migrations.</strong> Fiscal-year structures, contract shapes and connector outputs changed repeatedly across eight months. Not one needed a migration window.</li>
+        <li><strong>The ETL has no impedance mismatch.</strong> SAP exports arrive as records and land as documents. No ORM, no staging schema. That is most of why the ETL is ten connectors and not a data-engineering department.</li>
+        <li><strong>The partition key <em>is</em> the security boundary.</strong> Everything partitions on <code>/pk</code> carrying BU + fiscal year, so <code>hasBuScope</code> is enforced in the storage layout — not just a <code>WHERE</code> clause someone can forget.</li>
+      </ul>
+    </div>
+    <div>
+      <ul class="tight" style="font-size:.78em">
+        <li><strong>Operational features I'd otherwise build.</strong> TTL gives one-year audit retention as a <em>field</em>, not a cron job. ETags give optimistic concurrency without a locking strategy.</li>
+        <li><strong>One dependency, one region, an emulator.</strong> <code>npm run dev:up</code> and there is no second database technology to run, secure, back up or patch.</li>
+      </ul>
+      <div class="card bad" style="margin-top:.4em"><h4>The honest counterpoint</h4>
+        Cross-container joins and aggregations are <strong>my</strong> problem — hand-written and app-side.
+        A relational database would make ad-hoc analytical queries dramatically easier.</div>
+      <p class="quote" style="margin-top:.5em">Which is exactly why the AI reads a <strong>governed semantic layer</strong> instead of writing SQL.
+        The database choice and "tools, not text-to-SQL" are the same decision seen twice.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    The payoff is the last line — it connects a storage decision to the AI architecture and shows the
+    decisions were coherent rather than accidental. If someone pushes on analytics, concede immediately:
+    ad-hoc SQL is genuinely easier relationally, and I chose curation over generation on purpose.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017">
+  <div class="kicker">FAQ 4 — rapid fire <span class="pill tech">the uncomfortable ones</span></div>
+  <h2>Answers I don't get to soften</h2>
+  <table style="font-size:.56em">
+    <tr><th style="width:26%">Question</th><th>The answer</th></tr>
+    <tr><td><strong>Tools instead of text-to-SQL?</strong></td><td>A generated query cannot be authorized. All 83 tools enforce ABAC <em>inside the handler</em> before a row reaches the model, and return the citations the hooks accumulate. Text-to-SQL inverts that — the model composes the access path and you audit afterwards.</td></tr>
+    <tr><td><strong>How do you stop it inventing numbers?</strong></td><td>Structurally. Deterministic handlers emit citations and datasets; <code>PostToolUse</code> hooks accumulate them; the model is <strong>not the source of provenance</strong>. <em>Honest caveat:</em> the <code>ClaimV1</code> refine gate currently passes trivially — a guarantee that always passes is not a guarantee. It's documented and on the near list.</td></tr>
+    <tr><td><strong>Weakest part of the platform?</strong></td><td><strong>Durable execution.</strong> The dispatch queue has no consumer, so a restart orphans in-flight runs; the scheduler's 5-min stale lease is shorter than the 15-min run timeout — a latent double-fire. A documented Phase 4 deferral, and the one place LangGraph's checkpointing would genuinely have bought me something.</td></tr>
+    <tr><td><strong>No evals? In a financial app?</strong></td><td>Correct, and it tops the backlog. What exists is the opposite trade: ~1,100+ deterministic contract tests, frozen schemas, a named regression test per incident. Every model call in every test is a deterministic fake — strong guarantees about <em>behaviour</em>, none about <em>answer quality</em>. The probabilistic layer goes <em>on top of</em> the deterministic gate.</td></tr>
+    <tr><td><strong>What would you do differently?</strong></td><td>OpenTelemetry from day one — retrofitting <code>gen_ai.*</code> spans over a bespoke scheme is pure rework. Evals before feature twenty. And <strong>enforce before declaring</strong>: the sharpest audit finding was controls that were <em>persisted yet inert</em> — an admin sets <code>restrictedFields</code> and believes it works.</td></tr>
+  </table>
+  <p class="quote" style="margin-top:.55em">Documentation describing runtime behaviour you haven't written is worse than none —
+    for the same reason a test that agrees with your bug is worse than no test.</p>
+  <aside class="notes">
+    Do not rush this slide. Volunteering the weakest part before being asked is the single highest-credibility
+    move in the deck. The closing line ties back to the SEV1, the Jira bug and the redaction failures — same lesson, three places.
+  </aside>
+</section>
+
+<section data-background-color="#0c1017" class="center">
+  <div class="kicker">Thank you</div>
+  <h1 style="font-size:1.6em">Contracts,<br>Not Prompts</h1>
+  <div class="rule" style="max-width:440px;margin:.9em auto"></div>
+  <p class="lead">The bottleneck was never typing speed.<br>
+     It was <span style="color:var(--accent)">clarity of specification</span>.</p>
+  <p class="sub" style="margin-top:1.1em">Questions?</p>
+  <aside class="notes">
+    The four big objections (LangChain, single provider, Cosmos, evals) each have their own slide
+    immediately before this one — jump back to them rather than answering from memory.
+
+    Questions those slides do NOT cover:
+    · How much did AI write? Most of the code; all architecture decisions were mine — that's the point.
+    · Why one engineer? It wasn't a goal — it's what the contracts made possible.
+    · Vendor lock-in? runtime.js is the only SDK import; the swap cost is deliberately one file.
+    · Hallucination? Tools + structural citations + a validation oracle + a Needs Review queue that exists because validation sometimes fails.
+    · Is single-agent limiting? Scored 2/5 against a target of 3 — and the audit calls single-agent "a defensible choice". The weak part is the durable substrate, not the topology.
+  </aside>
+</section>
+
+</div></div>
+
+<script src="lib/reveal.js"></script>
+<script src="lib/notes.js"></script>
+<script src="lib/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash:true, slideNumber:'c/t', transition:'fade', transitionSpeed:'fast',
+    width:1440, height:900, margin:0.045, minScale:0.2, maxScale:1.6,
+    plugins:[ RevealNotes, RevealHighlight ]
+  });
+</script>
+</body>
+</html>
