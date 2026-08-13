@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 880" width="1240" height="880" role="img" aria-label="Model auto-discovery, tier classification, admin policy routing and the health circuit breaker">
+<style>
+  .bg{fill:#ffffff}.band{fill:#f4f6fa;stroke:#dde3ec}.box{fill:#ffffff;stroke:#c3ccda}
+  .accentbox{fill:#fff4ec;stroke:#ff7a29}.aibox{fill:#eef6ff;stroke:#4da3ff}
+  .okbox{fill:#eefaf3;stroke:#3ddc97}.badbox{fill:#fdeeee;stroke:#e05555}
+  .warnbox{fill:#fff8e8;stroke:#e0a500}
+  .t{font-family:Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#111827}
+  .mut{fill:#5b6577}.kick{fill:#ff7a29;font-weight:700;letter-spacing:.14em}
+  .mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .arrow{stroke:#8b95a7;fill:none;stroke-width:1.6}.ah{fill:#8b95a7}
+  @media (prefers-color-scheme: dark){
+    .bg{fill:#0c1017}.band{fill:#131924;stroke:#242c3a}.box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}.aibox{fill:#10203a;stroke:#4da3ff}
+    .okbox{fill:#0f2a1f;stroke:#3ddc97}.badbox{fill:#2c1414;stroke:#e05555}
+    .warnbox{fill:#2b2410;stroke:#e0a500}
+    .t{fill:#e8eaf0}.mut{fill:#9aa3b2}.arrow{stroke:#6b7688}.ah{fill:#6b7688}
+  }
+.bg{fill:#0c1017}.band{fill:#131924;stroke:#242c3a}.box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}.aibox{fill:#10203a;stroke:#4da3ff}
+    .okbox{fill:#0f2a1f;stroke:#3ddc97}.badbox{fill:#2c1414;stroke:#e05555}
+    .warnbox{fill:#2b2410;stroke:#e0a500}
+    .t{fill:#e8eaf0}.mut{fill:#9aa3b2}.arrow{stroke:#6b7688}.ah{fill:#6b7688}
+</style>
+<rect class="bg" width="1240" height="880"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+
+<text class="t kick" x="40" y="40" font-size="13">MODEL AUTO-DISCOVERY, ROUTING AND THE HEALTH BREAKER</text>
+<text class="t mut" x="40" y="64" font-size="13">The platform is not pinned to a model string in an env var. It discovers what exists, ranks it by policy, and demotes what misbehaves — at runtime.</text>
+
+<!-- DISCOVERY -->
+<rect class="band" x="40" y="88" width="580" height="272" rx="12"/>
+<text class="t kick" x="60" y="114" font-size="11">1 · DISCOVERY — A LONG-LIVED IN-PROCESS SINGLETON</text>
+
+<rect class="aibox" x="60" y="126" width="540" height="58" rx="8"/>
+<text class="t" x="74" y="148" font-size="13" font-weight="700">Anthropic <tspan class="mono">/v1/models</tspan> — on boot, then every 12 hours</text>
+<text class="t mut" x="74" y="168" font-size="11.5">Non-blocking: the service boots first and discovers ~5s later. 3 retries with backoff.</text>
+
+<path class="arrow" marker-end="url(#a)" d="M330 184 L330 200"/>
+
+<rect class="box" x="60" y="206" width="540" height="80" rx="8"/>
+<text class="t" x="74" y="228" font-size="13" font-weight="700">Classify → tier, flag beta, sort newest-first</text>
+<text class="t mut mono" x="74" y="250" font-size="11.5">TIER_PATTERNS  fable → opus → sonnet → haiku   (first match wins)</text>
+<text class="t mut mono" x="74" y="268" font-size="11.5">BETA_RE  beta | preview | alpha | experimental | rc   → admin opt-in only</text>
+<text class="t mut" x="74" y="282" font-size="11">Model ids are regex-validated before use — a malformed id never reaches the provider.</text>
+
+<path class="arrow" marker-end="url(#a)" d="M330 286 L330 302"/>
+
+<rect class="okbox" x="60" y="308" width="540" height="42" rx="8"/>
+<text class="t" x="74" y="328" font-size="12.5" font-weight="700">Persist the normalised catalog into Cosmos</text>
+<text class="t mut" x="74" y="344" font-size="11">So the admin dropdown renders without any browser ever calling Anthropic.</text>
+
+<!-- FAILURE POSTURE -->
+<rect class="band" x="640" y="88" width="560" height="272" rx="12"/>
+<text class="t kick" x="660" y="114" font-size="11">FAILURE POSTURE — SAFE DEFAULTS, NEVER THROW</text>
+<rect class="box" x="660" y="126" width="520" height="66" rx="8"/>
+<text class="t" x="674" y="148" font-size="12.5" font-weight="700">First boot fails?</text>
+<text class="t mut" x="674" y="168" font-size="11.5">Catalog is empty → auto mode falls back to the manual priority list</text>
+<text class="t mut" x="674" y="184" font-size="11.5">(<tspan class="mono">ANTHROPIC_MODEL_PREFERENCE</tspan> → sonnet → haiku).</text>
+
+<rect class="box" x="660" y="200" width="520" height="66" rx="8"/>
+<text class="t" x="674" y="222" font-size="12.5" font-weight="700">A later refresh fails?</text>
+<text class="t mut" x="674" y="242" font-size="11.5">The stale catalog is retained and the error is surfaced on the cached</text>
+<text class="t mut" x="674" y="258" font-size="11.5">snapshot — visible to admins, invisible to users.</text>
+
+<rect class="badbox" x="660" y="274" width="520" height="76" rx="8"/>
+<text class="t" x="674" y="296" font-size="12.5" font-weight="700">The honest failure, recorded in the code itself</text>
+<text class="t mut" x="674" y="316" font-size="11.5">A model matching NO tier pattern lands in <tspan class="mono">other</tspan>, which auto mode never</text>
+<text class="t mut" x="674" y="332" font-size="11.5">selects. A new tier must be added to the pattern list <tspan font-weight="700">and</tspan> the tier order.</text>
+<text class="t mut" x="674" y="346" font-size="11.5" font-style="italic">"…this is exactly how claude-fable-5 was missed."  — source comment</text>
+
+<!-- ROUTING -->
+<rect class="band" x="40" y="376" width="1160" height="196" rx="12"/>
+<text class="t kick" x="60" y="402" font-size="11">2 · ROUTING — ADMIN POLICY DECIDES, NOT A HARDCODED STRING</text>
+
+<rect class="accentbox" x="60" y="414" width="264" height="66" rx="8"/>
+<text class="t" x="74" y="436" font-size="12.5" font-weight="700">AUTO mode</text>
+<text class="t mut" x="74" y="456" font-size="11">Walk the tier order, newest-first within tier:</text>
+<text class="t mut mono" x="74" y="472" font-size="11">fable → opus → sonnet → haiku</text>
+
+<path class="arrow" marker-end="url(#a)" d="M324 447 L352 447"/>
+
+<rect class="box" x="358" y="414" width="264" height="66" rx="8"/>
+<text class="t" x="372" y="436" font-size="12.5" font-weight="700">MANUAL mode</text>
+<text class="t mut" x="372" y="456" font-size="11">Admin-curated priority list, evaluated in order.</text>
+<text class="t mut" x="372" y="472" font-size="11">Excluded models are filtered out entirely.</text>
+
+<path class="arrow" marker-end="url(#a)" d="M622 447 L650 447"/>
+
+<rect class="box" x="656" y="414" width="264" height="66" rx="8"/>
+<text class="t" x="670" y="436" font-size="12.5" font-weight="700">Candidate list</text>
+<text class="t mut" x="670" y="456" font-size="11">Demoted models are pushed to the BACK,</text>
+<text class="t mut" x="670" y="472" font-size="11">not removed — degradation, not outage.</text>
+
+<path class="arrow" marker-end="url(#a)" d="M920 447 L948 447"/>
+
+<rect class="okbox" x="954" y="414" width="226" height="66" rx="8"/>
+<text class="t" x="968" y="436" font-size="12.5" font-weight="700">Attempt → retry → fall through</text>
+<text class="t mut" x="968" y="456" font-size="11">Per-model attempt budget, then the</text>
+<text class="t mut" x="968" y="472" font-size="11">next candidate. 60s per provider call.</text>
+
+<rect class="accentbox" x="60" y="494" width="1120" height="62" rx="8"/>
+<text class="t" x="76" y="516" font-size="13" font-weight="700">The same resolver binds every Claude call in the platform</text>
+<text class="t mut" x="76" y="538" font-size="11.5">Interactive chat, Composer V2 dry-runs, and every scheduled agent run all resolve through <tspan class="mono">resolveModelPolicy → buildModelCandidates</tspan>.</text>
+<text class="t mut" x="76" y="552" font-size="11.5">One admin policy change moves the whole platform. There is no second place where a model id is chosen.</text>
+
+<!-- HEALTH BREAKER -->
+<rect class="band" x="40" y="588" width="1160" height="196" rx="12"/>
+<text class="t kick" x="60" y="614" font-size="11">3 · HEALTH — A CIRCUIT BREAKER FED BY THE BUSIEST SURFACE</text>
+
+<rect class="box" x="60" y="626" width="340" height="88" rx="8"/>
+<text class="t" x="74" y="648" font-size="12.5" font-weight="700">Observations come from CHAT</text>
+<text class="t mut" x="74" y="668" font-size="11">Chat hits the provider orders of magnitude more often</text>
+<text class="t mut" x="74" y="684" font-size="11">than weekly agents do. Per-attempt latency + outcome</text>
+<text class="t mut" x="74" y="700" font-size="11">are recorded per (model, attempt).</text>
+
+<path class="arrow" marker-end="url(#a)" d="M400 670 L432 670"/>
+
+<rect class="warnbox" x="438" y="626" width="340" height="88" rx="8"/>
+<text class="t" x="452" y="648" font-size="12.5" font-weight="700">Thresholds come from ADMIN POLICY</text>
+<text class="t mut" x="452" y="668" font-size="11">p95 slow-latency · error-rate % · minimum sample</text>
+<text class="t mut" x="452" y="684" font-size="11">count · demotion minutes · breaker on/off —</text>
+<text class="t mut" x="452" y="700" font-size="11">all read from the group document per request.</text>
+
+<path class="arrow" marker-end="url(#a)" d="M778 670 L810 670"/>
+
+<rect class="okbox" x="816" y="626" width="364" height="88" rx="8"/>
+<text class="t" x="830" y="648" font-size="12.5" font-weight="700">Demotion, then automatic recovery</text>
+<text class="t mut" x="830" y="668" font-size="11">A misbehaving model drops to the back of the list for</text>
+<text class="t mut" x="830" y="684" font-size="11">N minutes, then returns. A snapshot is written to</text>
+<text class="t mut" x="830" y="700" font-size="11">Cosmos every ~60s so admins can see it.</text>
+
+<text class="t mut" x="60" y="742" font-size="11.5">Why an agent run does not drive the breaker: one scheduled report makes ONE provider call. A sample size of 1 cannot support a reliable demotion decision —</text>
+<text class="t mut" x="60" y="758" font-size="11.5">so agents <tspan font-weight="700">consume</tspan> the breaker's verdict but never <tspan font-weight="700">write</tspan> to it. Ownership of the feed sits with the surface that has the statistics.</text>
+<text class="t" x="60" y="776" font-size="11.5" font-weight="700">Single-instance deployment is an explicit, documented assumption — there is no cross-instance state sync, and the code says so.</text>
+
+<!-- takeaway -->
+<rect class="accentbox" x="40" y="800" width="1160" height="60" rx="12"/>
+<text class="t" x="60" y="826" font-size="13.5" font-weight="700">The point: model choice is operational configuration, not a deployment.</text>
+<text class="t mut" x="60" y="848" font-size="12">When a new frontier model ships, an admin picks it from a dropdown that populated itself. When one degrades, the platform routes around it and recovers on its own. Neither event needs an engineer.</text>
+</svg>

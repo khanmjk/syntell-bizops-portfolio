@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 800" width="1240" height="800" role="img" aria-label="SAP connector pattern: seven-stage ETL, four artifacts, run contract and no-loss reconciliation">
+<style>
+  .bg{fill:#ffffff}.band{fill:#f4f6fa;stroke:#dde3ec}.box{fill:#ffffff;stroke:#c3ccda}
+  .accentbox{fill:#fff4ec;stroke:#ff7a29}.aibox{fill:#eef6ff;stroke:#4da3ff}
+  .okbox{fill:#eefaf3;stroke:#3ddc97}.badbox{fill:#fdeeee;stroke:#e05555}
+  .t{font-family:Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#111827}
+  .mut{fill:#5b6577}.kick{fill:#ff7a29;font-weight:700;letter-spacing:.14em}
+  .mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .arrow{stroke:#8b95a7;fill:none;stroke-width:1.6}.ah{fill:#8b95a7}
+  @media (prefers-color-scheme: dark){
+    .bg{fill:#0c1017}.band{fill:#131924;stroke:#242c3a}.box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}.aibox{fill:#10203a;stroke:#4da3ff}
+    .okbox{fill:#0f2a1f;stroke:#3ddc97}.badbox{fill:#2c1414;stroke:#e05555}
+    .t{fill:#e8eaf0}.mut{fill:#9aa3b2}.arrow{stroke:#6b7688}.ah{fill:#6b7688}
+  }
+.bg{fill:#0c1017}.band{fill:#131924;stroke:#242c3a}.box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}.aibox{fill:#10203a;stroke:#4da3ff}
+    .okbox{fill:#0f2a1f;stroke:#3ddc97}.badbox{fill:#2c1414;stroke:#e05555}
+    .t{fill:#e8eaf0}.mut{fill:#9aa3b2}.arrow{stroke:#6b7688}.ah{fill:#6b7688}
+</style>
+<rect class="bg" width="1240" height="800"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+
+<text class="t kick" x="40" y="40" font-size="13">THE SAP CONNECTOR PATTERN — THE PIPELINE IS FIXED, THE CONNECTORS ARE PLUGGABLE</text>
+<text class="t mut" x="40" y="64" font-size="13">There is no ERP API. So the export becomes the integration surface — and the pipeline proves it lost nothing before anyone sees a number.</text>
+
+<!-- pipeline -->
+<rect class="band" x="40" y="88" width="1160" height="150" rx="12"/>
+<text class="t kick" x="60" y="114" font-size="11">SEVEN STAGES · ~30 SECONDS END TO END</text>
+<g font-size="11.5">
+  <rect class="box" x="60" y="128" width="140" height="58" rx="7"/>
+  <text class="t" x="72" y="148" font-weight="700">1 · Upload</text><text class="t mut" x="72" y="164">user drops the XLS</text><text class="t mut" x="72" y="178">from a t-code export</text>
+  <path class="arrow" marker-end="url(#a)" d="M200 157 L216 157"/>
+  <rect class="box" x="222" y="128" width="140" height="58" rx="7"/>
+  <text class="t" x="234" y="148" font-weight="700">2 · Blob</text><text class="t mut mono" x="234" y="164" >sap-exports</text><text class="t mut" x="234" y="178">container</text>
+  <path class="arrow" marker-end="url(#a)" d="M362 157 L378 157"/>
+  <rect class="box" x="384" y="128" width="140" height="58" rx="7"/>
+  <text class="t" x="396" y="148" font-weight="700">3 · EventGrid</text><text class="t mut" x="396" y="164">blob-created</text><text class="t mut" x="396" y="178">trigger fires</text>
+  <path class="arrow" marker-end="url(#a)" d="M524 157 L540 157"/>
+  <rect class="accentbox" x="546" y="128" width="160" height="58" rx="7"/>
+  <text class="t" x="558" y="148" font-weight="700">4 · Python extract</text><text class="t mut" x="558" y="164">parse SAP layout ·</text><text class="t mut" x="558" y="178">normalise · flag anomalies</text>
+  <path class="arrow" marker-end="url(#a)" d="M706 157 L722 157"/>
+  <rect class="box" x="728" y="128" width="150" height="58" rx="7"/>
+  <text class="t" x="740" y="148" font-weight="700">5 · Node sync</text><text class="t mut" x="740" y="164">upsert to Cosmos</text><text class="t mut" x="740" y="178">then verify its own writes</text>
+  <path class="arrow" marker-end="url(#a)" d="M878 157 L894 157"/>
+  <rect class="box" x="900" y="128" width="132" height="58" rx="7"/>
+  <text class="t" x="912" y="148" font-weight="700">6 · Manifest</text><text class="t mut" x="912" y="164">bump per-connector</text><text class="t mut" x="912" y="178">version counter</text>
+  <path class="arrow" marker-end="url(#a)" d="M1032 157 L1048 157"/>
+  <rect class="box" x="1054" y="128" width="126" height="58" rx="7"/>
+  <text class="t" x="1066" y="148" font-weight="700">7 · Cache</text><text class="t mut" x="1066" y="164">targeted client</text><text class="t mut" x="1066" y="178">invalidation</text>
+</g>
+<text class="t mut" x="60" y="212" font-size="11.5">The process this replaced — export, email the workbook, paste into a shared spreadsheet — took days and had no audit trail.</text>
+<text class="t mut" x="60" y="230" font-size="11.5">Why not a direct API? Enabling OData on ECC needs BASIS, change management and transport requests: three months minimum. Exports are already in the business workflow, so adoption cost is zero.</text>
+
+<!-- four artifacts -->
+<rect class="band" x="40" y="254" width="700" height="222" rx="12"/>
+<text class="t kick" x="60" y="280" font-size="11">EVERY RUN EMITS EXACTLY FOUR ARTIFACTS</text>
+<g font-size="11.5">
+  <rect class="box" x="60" y="292" width="322" height="52" rx="7"/>
+  <text class="t" x="74" y="312" font-weight="700">summary</text><text class="t mut" x="74" y="330">YoY metrics · monthly breakdown · totals by FY → hero cards, AI summary tools</text>
+  <rect class="box" x="392" y="292" width="328" height="52" rx="7"/>
+  <text class="t" x="406" y="312" font-weight="700">ledger</text><text class="t mut" x="406" y="330">every normalised row → reconciliation + AI drill-down</text>
+  <rect class="box" x="60" y="356" width="322" height="52" rx="7"/>
+  <text class="t" x="74" y="376" font-weight="700">anomalies</text><text class="t mut" x="74" y="394">missing fields · out-of-range · assumptions applied → admin inspector</text>
+  <rect class="box" x="392" y="356" width="328" height="52" rx="7"/>
+  <text class="t" x="406" y="376" font-weight="700">run</text><text class="t mut" x="406" y="394">status · runId · timestamps · reconciliation counters → monitoring + audit</text>
+</g>
+<text class="t mut" x="60" y="434" font-size="11.5">Large ledgers are chunked into partitioned detail documents (<tspan class="mono">partIndex / partCount</tspan>, ~500 rows each) so the AI can drill</text>
+<text class="t mut" x="60" y="452" font-size="11.5">into a single customer's transactions without loading the whole year — and without ever touching SAP at question time.</text>
+<text class="t mut" x="60" y="468" font-size="11.5">Ten connector families: sales · debtors · order book · delivery · stock · expenses · FinPack · purchase orders · PO lines · GRN receipts.</text>
+
+<!-- run contract gate -->
+<rect class="accentbox" x="752" y="254" width="448" height="222" rx="12"/>
+<text class="t kick" x="772" y="280" font-size="11">THE RUN CONTRACT — THE GATE</text>
+<text class="t mut" x="772" y="302" font-size="12">A run is promoted to "latest" only if it can prove it lost nothing:</text>
+<rect class="box" x="772" y="314" width="408" height="76" rx="7"/>
+<text class="t mono" x="788" y="336" font-size="12">importStatus === 'SUCCESS'</text>
+<text class="t mono" x="788" y="356" font-size="12">&amp;&amp; latestPointerUpdated === true</text>
+<text class="t mono" x="788" y="376" font-size="12">&amp;&amp; reconciliation.isBalanced === true</text>
+<text class="t" x="772" y="412" font-size="12.5" font-weight="700">isBalanced ⇔ sourceRows === includedRows + excludedRows</text>
+<text class="t mut" x="772" y="434" font-size="11.5">If one row vanishes between the spreadsheet and the summary, the run</text>
+<text class="t mut" x="772" y="450" font-size="11.5"><tspan font-weight="700">fails</tspan> and the previous good data stays live. Nobody sees a silently</text>
+<text class="t mut" x="772" y="466" font-size="11.5">wrong number — that failure mode is designed out at the boundary.</text>
+
+<!-- recipe -->
+<rect class="band" x="40" y="492" width="700" height="176" rx="12"/>
+<text class="t kick" x="60" y="518" font-size="11">ADDING CONNECTOR ELEVEN — THE WHOLE RECIPE</text>
+<g font-size="11.5">
+  <text class="t" x="60" y="544" font-weight="700">1 ·</text><text class="t" x="86" y="544">Registry entry in three runtimes</text><text class="t mut" x="330" y="544">Python · Node sync · API  (~20 lines each)</text>
+  <text class="t" x="60" y="568" font-weight="700">2 ·</text><text class="t" x="86" y="568">One Python extractor</text><text class="t mut" x="330" y="568">the only real work — the SAP layout differs per t-code</text>
+  <text class="t" x="60" y="592" font-weight="700">3 ·</text><text class="t" x="86" y="592">Two sync scripts</text><text class="t mut" x="330" y="592">publish + verify, both from a template</text>
+  <text class="t" x="60" y="616" font-weight="700">4 ·</text><text class="t" x="86" y="616">Wire the orchestration map</text><text class="t mut" x="330" y="616">one line</text>
+  <text class="t" x="60" y="640" font-weight="700">5 ·</text><text class="t" x="86" y="640">Optional: declare AI tools</text><text class="t mut" x="330" y="640">connector → defTypes → queryable row fields</text>
+</g>
+<text class="t mut" x="60" y="660" font-size="11.5">Upload endpoint, EventGrid wiring, blob paths, cache invalidation and the admin UI are all connector-agnostic — untouched.</text>
+
+<!-- shared framework -->
+<rect class="okbox" x="752" y="492" width="448" height="176" rx="12"/>
+<text class="t kick" x="772" y="518" font-size="11">SHARED PYTHON FRAMEWORK</text>
+<text class="t mut" x="772" y="540" font-size="11.5">The extractor implements only the domain-specific part. The framework</text>
+<text class="t mut" x="772" y="556" font-size="11.5">handles everything else, identically for every connector:</text>
+<g class="mono" font-size="11">
+  <text class="t" x="772" y="580">resolve_connector_input_file()</text>
+  <text class="t" x="772" y="600">build_run_context(buId, connector, runId)</text>
+  <text class="t" x="772" y="620">validate_run_contract()</text>
+  <text class="t" x="772" y="640">copy_latest()   ·   cleanup_history(keep=3)</text>
+</g>
+<text class="t mut" x="772" y="660" font-size="11">Bounded retention: history is kept for the last N runs, then reaped.</text>
+
+<!-- lesson -->
+<rect class="band" x="40" y="684" width="1160" height="88" rx="12"/>
+<text class="t kick" x="60" y="710" font-size="11">WHY THIS SHAPE</text>
+<text class="t" x="60" y="736" font-size="13.5" font-weight="700">Start with the export, not the API. Then make the pipeline prove conservation before it is allowed to publish.</text>
+<text class="t mut" x="60" y="758" font-size="12">The XLS-upload bridge will never win an architecture award — but it has been running for months, cost nothing, and keeps SAP fully decoupled. If we ever migrate to S/4HANA, only the extractors change.</text>
+</svg>

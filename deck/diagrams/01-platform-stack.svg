@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 860" width="1240" height="860" role="img" aria-label="Syntell BizOps Intelligence platform stack">
+<style>
+  :root{color-scheme:light dark}
+  .bg{fill:#ffffff}
+  .band{fill:#f4f6fa;stroke:#dde3ec}
+  .box{fill:#ffffff;stroke:#c3ccda}
+  .accentbox{fill:#fff4ec;stroke:#ff7a29}
+  .aibox{fill:#eef6ff;stroke:#4da3ff}
+  .databox{fill:#eefaf3;stroke:#3ddc97}
+  .t{font-family:Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#111827}
+  .mut{fill:#5b6577}
+  .kick{fill:#ff7a29;font-weight:700;letter-spacing:.14em}
+  .mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .arrow{stroke:#8b95a7;fill:none;stroke-width:1.6}
+  .arrowhead{fill:#8b95a7}
+  @media (prefers-color-scheme: dark){
+    .bg{fill:#0c1017}
+    .band{fill:#131924;stroke:#242c3a}
+    .box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}
+    .aibox{fill:#10203a;stroke:#4da3ff}
+    .databox{fill:#0f2a1f;stroke:#3ddc97}
+    .t{fill:#e8eaf0}
+    .mut{fill:#9aa3b2}
+    .arrow{stroke:#6b7688}
+    .arrowhead{fill:#6b7688}
+  }
+.bg{fill:#0c1017}
+    .band{fill:#131924;stroke:#242c3a}
+    .box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}
+    .aibox{fill:#10203a;stroke:#4da3ff}
+    .databox{fill:#0f2a1f;stroke:#3ddc97}
+    .t{fill:#e8eaf0}
+    .mut{fill:#9aa3b2}
+    .arrow{stroke:#6b7688}
+    .arrowhead{fill:#6b7688}
+</style>
+<rect class="bg" width="1240" height="860"/>
+<defs>
+  <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path class="arrowhead" d="M0 0 L10 5 L0 10 z"/>
+  </marker>
+</defs>
+
+<text class="t kick" x="40" y="42" font-size="13">SYNTELL BIZOPS INTELLIGENCE — PLATFORM STACK</text>
+<text class="t mut" x="40" y="66" font-size="13">One engineer · 1,184 commits · Azure South Africa North · four cooperating runtimes</text>
+
+<!-- CLIENT -->
+<rect class="band" x="40" y="90" width="1160" height="118" rx="12"/>
+<text class="t kick" x="60" y="116" font-size="11">CLIENT</text>
+<rect class="box" x="60" y="126" width="286" height="66" rx="9"/>
+<text class="t" x="76" y="150" font-size="14" font-weight="700">React 19 SPA · Vite · Tailwind</text>
+<text class="t mut" x="76" y="170" font-size="11.5">24 routed views · 149 components · Recharts</text>
+<text class="t mut" x="76" y="185" font-size="11.5">Role-based dashboard lenses (28 widgets)</text>
+
+<rect class="accentbox" x="360" y="126" width="286" height="66" rx="9"/>
+<text class="t" x="376" y="150" font-size="14" font-weight="700">financialModel.js — pure function</text>
+<text class="t mut" x="376" y="170" font-size="11.5">Runs in-browser: &lt;16ms what-if loops</text>
+<text class="t mut" x="376" y="185" font-size="11.5">Same engine also runs API-side and AI-side</text>
+
+<rect class="databox" x="660" y="126" width="286" height="66" rx="9"/>
+<text class="t" x="676" y="150" font-size="14" font-weight="700">Encrypted client cache</text>
+<text class="t mut" x="676" y="170" font-size="11.5">AES-GCM · per-surface keys · gzip-then-encrypt</text>
+<text class="t mut" x="676" y="185" font-size="11.5">Fail-closed · 5 sensitive surfaces onboarded</text>
+
+<rect class="box" x="960" y="126" width="220" height="66" rx="9"/>
+<text class="t" x="976" y="150" font-size="14" font-weight="700">Manifest polling</text>
+<text class="t mut" x="976" y="170" font-size="11.5">~60s version check</text>
+<text class="t mut" x="976" y="185" font-size="11.5">Per-connector invalidation</text>
+
+<path class="arrow" marker-end="url(#a)" d="M620 208 L620 244"/>
+<text class="t mut" x="632" y="232" font-size="11.5">HTTPS · Microsoft Entra ID SSO (EasyAuth)</text>
+
+<!-- EDGE -->
+<rect class="band" x="40" y="248" width="1160" height="72" rx="12"/>
+<text class="t kick" x="60" y="274" font-size="11">EDGE — WEB APP SERVICE (South Africa North)</text>
+<rect class="box" x="60" y="282" width="1120" height="28" rx="7"/>
+<text class="t" x="76" y="301" font-size="12.5">Express front door — serves the SPA, proxies <tspan class="mono">/api/*</tspan> to the Function App and <tspan class="mono">/api/ai/*</tspan> to the AI service · co-located with Cosmos (~5ms, was 180ms cross-Atlantic)</text>
+
+<path class="arrow" marker-end="url(#a)" d="M330 320 L330 366"/>
+<path class="arrow" marker-end="url(#a)" d="M900 320 L900 366"/>
+
+<!-- SERVICES -->
+<rect class="band" x="40" y="370" width="560" height="216" rx="12"/>
+<text class="t kick" x="60" y="396" font-size="11">FUNCTION APP API — isolated deploy artifact</text>
+<rect class="box" x="60" y="406" width="252" height="52" rx="8"/>
+<text class="t" x="74" y="428" font-size="13" font-weight="700">42 function modules</text>
+<text class="t mut" x="74" y="447" font-size="11">products · customers · actuals · contracts · SAP</text>
+<rect class="accentbox" x="326" y="406" width="252" height="52" rx="8"/>
+<text class="t" x="340" y="428" font-size="13" font-weight="700">3-layer authorization</text>
+<text class="t mut" x="340" y="447" font-size="11">RBAC (12/34) → BU scope → ABAC ownership</text>
+<rect class="box" x="60" y="470" width="252" height="52" rx="8"/>
+<text class="t" x="74" y="492" font-size="13" font-weight="700">Budget lock lifecycle</text>
+<text class="t mut" x="74" y="511" font-size="11">planning → locked → execution · post-lock gates</text>
+<rect class="box" x="326" y="470" width="252" height="52" rx="8"/>
+<text class="t" x="340" y="492" font-size="13" font-weight="700">Audit + operational logs</text>
+<text class="t mut" x="340" y="511" font-size="11">field-level deep diff · denied writes recorded</text>
+<rect class="box" x="60" y="534" width="518" height="38" rx="8"/>
+<text class="t mut" x="74" y="558" font-size="11.5"><tspan class="mono">containerConfig.js</tspan> is the single source of truth for partition keys — no script may hardcode one</text>
+
+<rect class="band" x="620" y="370" width="580" height="216" rx="12"/>
+<text class="t kick" x="640" y="396" font-size="11">AI SERVICE — dedicated Fastify App Service</text>
+<rect class="aibox" x="640" y="406" width="262" height="52" rx="8"/>
+<text class="t" x="654" y="428" font-size="13" font-weight="700">Chat engine · 83 tools</text>
+<text class="t mut" x="654" y="447" font-size="11">SSE streaming · 3-layer cache · tool budgets</text>
+<rect class="aibox" x="916" y="406" width="264" height="52" rx="8"/>
+<text class="t" x="930" y="428" font-size="13" font-weight="700">Agent runtime</text>
+<text class="t mut" x="930" y="447" font-size="11">Claude Agent SDK · in-process MCP · 75 caps</text>
+<rect class="box" x="640" y="470" width="262" height="52" rx="8"/>
+<text class="t" x="654" y="492" font-size="13" font-weight="700">Chat profiles</text>
+<text class="t mut" x="654" y="511" font-size="11">general · composer-v2 · validator (server-only)</text>
+<rect class="box" x="916" y="470" width="264" height="52" rx="8"/>
+<text class="t" x="930" y="492" font-size="13" font-weight="700">Scheduler + quotas</text>
+<text class="t mut" x="930" y="511" font-size="11">cadences · leases · per-BU + per-agent cost caps</text>
+<rect class="box" x="640" y="534" width="540" height="38" rx="8"/>
+<text class="t mut" x="654" y="558" font-size="11.5"><tspan class="mono">runtime.js</tspan> is the ONLY file importing the Agent SDK — SDK types never leak into stores, hooks or ai-core</text>
+
+<path class="arrow" marker-end="url(#a)" d="M330 586 L330 632"/>
+<path class="arrow" marker-end="url(#a)" d="M900 586 L900 632"/>
+
+<!-- DATA -->
+<rect class="band" x="40" y="636" width="1160" height="88" rx="12"/>
+<text class="t kick" x="60" y="662" font-size="11">DATA — AZURE COSMOS DB (serverless, SA North)</text>
+<rect class="databox" x="60" y="672" width="1120" height="40" rx="8"/>
+<text class="t" x="76" y="690" font-size="12.5" font-weight="700">11 containers · every one partitioned on <tspan class="mono">/pk</tspan></text>
+<text class="t mut mono" x="76" y="706" font-size="11.5">products · customers · actuals · config · definitions · users · groups · rbac · audit · feedback · presence   —   hot path = single-partition reads at 5–10 RU</text>
+
+<path class="arrow" marker-end="url(#a)" d="M620 800 L620 728"/>
+
+<!-- ETL -->
+<rect class="band" x="40" y="768" width="1160" height="72" rx="12"/>
+<text class="t kick" x="60" y="794" font-size="11">SAP BRIDGE — event-driven ETL (no ERP API exists)</text>
+<rect class="box" x="60" y="802" width="1120" height="30" rx="7"/>
+<text class="t mut" x="76" y="822" font-size="11.5">XLS export → Blob → EventGrid → Python extract → <tspan class="t" font-weight="700">4 artifacts (summary · ledger · anomalies · run)</tspan> → Node sync + self-verify → manifest bump → cache invalidation · <tspan class="t" font-weight="700">10 connector families</tspan></text>
+</svg>

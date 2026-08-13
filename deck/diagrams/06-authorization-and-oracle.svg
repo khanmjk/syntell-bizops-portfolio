@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 800" width="1240" height="800" role="img" aria-label="Three-layer authorization model and the decision oracle test harness">
+<style>
+  .bg{fill:#ffffff}.band{fill:#f4f6fa;stroke:#dde3ec}.box{fill:#ffffff;stroke:#c3ccda}
+  .accentbox{fill:#fff4ec;stroke:#ff7a29}.aibox{fill:#eef6ff;stroke:#4da3ff}
+  .okbox{fill:#eefaf3;stroke:#3ddc97}.badbox{fill:#fdeeee;stroke:#e05555}
+  .t{font-family:Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#111827}
+  .mut{fill:#5b6577}.kick{fill:#ff7a29;font-weight:700;letter-spacing:.14em}
+  .mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .arrow{stroke:#8b95a7;fill:none;stroke-width:1.6}.ah{fill:#8b95a7}
+  @media (prefers-color-scheme: dark){
+    .bg{fill:#0c1017}.band{fill:#131924;stroke:#242c3a}.box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}.aibox{fill:#10203a;stroke:#4da3ff}
+    .okbox{fill:#0f2a1f;stroke:#3ddc97}.badbox{fill:#2c1414;stroke:#e05555}
+    .t{fill:#e8eaf0}.mut{fill:#9aa3b2}.arrow{stroke:#6b7688}.ah{fill:#6b7688}
+  }
+.bg{fill:#0c1017}.band{fill:#131924;stroke:#242c3a}.box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}.aibox{fill:#10203a;stroke:#4da3ff}
+    .okbox{fill:#0f2a1f;stroke:#3ddc97}.badbox{fill:#2c1414;stroke:#e05555}
+    .t{fill:#e8eaf0}.mut{fill:#9aa3b2}.arrow{stroke:#6b7688}.ah{fill:#6b7688}
+</style>
+<rect class="bg" width="1240" height="800"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+
+<text class="t kick" x="40" y="40" font-size="13">AUTHORIZATION — THE PART THAT TOOK LONGEST AND DEMOS WORST</text>
+<text class="t mut" x="40" y="64" font-size="13">It consumed more engineering time than any dashboard view. It is also the only reason finance lets this system near real numbers.</text>
+
+<text class="t" x="40" y="104" font-size="22" font-weight="700">allow = <tspan fill="#ff7a29">hasPermission</tspan> <tspan class="mut" font-size="18">AND</tspan> <tspan fill="#4da3ff">hasBuScope</tspan> <tspan class="mut" font-size="18">AND</tspan> <tspan fill="#3ddc97">ownsResource</tspan></text>
+
+<!-- three layers -->
+<rect class="band" x="40" y="126" width="1160" height="196" rx="12"/>
+<rect class="box" x="60" y="140" width="366" height="166" rx="9"/>
+<text class="t kick" x="76" y="164" font-size="11">LAYER 1 — IDENTITY</text>
+<text class="t" x="76" y="188" font-size="14" font-weight="700">Microsoft Entra ID SSO</text>
+<text class="t mut" x="76" y="212" font-size="11.5">No local passwords. No session management.</text>
+<text class="t mut" x="76" y="230" font-size="11.5">Token validated on every API request.</text>
+<text class="t" x="76" y="258" font-size="12" font-weight="700">The platform token says only:</text>
+<text class="t mono" x="76" y="278" font-size="12">tokenRoles: ["authenticated"]</text>
+<text class="t mut" x="76" y="298" font-size="11.5">Identity says <tspan font-style="italic">who you are</tspan> — nothing more.</text>
+
+<rect class="accentbox" x="440" y="140" width="366" height="166" rx="9"/>
+<text class="t kick" x="456" y="164" font-size="11">LAYER 2 — RBAC (DB-AUTHORITATIVE)</text>
+<text class="t" x="456" y="188" font-size="14" font-weight="700">The database decides what you can do</text>
+<text class="t mono" x="456" y="212" font-size="12">profileRoles: ["account_manager", …]</text>
+<text class="t mut" x="456" y="234" font-size="11.5"><tspan font-weight="700">12 roles · 34 permissions</tspan>, stored in Cosmos,</text>
+<text class="t mut" x="456" y="252" font-size="11.5">cached 30s, changeable <tspan font-weight="700">without a deploy</tspan>.</text>
+<text class="t mut" x="456" y="276" font-size="11">admin · group_admin · group_ceo · group_finance · finance_manager</text>
+<text class="t mut" x="456" y="292" font-size="11">sales_admin · account_manager · production_manager · viewer …</text>
+
+<rect class="okbox" x="820" y="140" width="360" height="166" rx="9"/>
+<text class="t kick" x="836" y="164" font-size="11">LAYER 3 — ABAC (ATTRIBUTES)</text>
+<text class="t" x="836" y="188" font-size="14" font-weight="700">…and on which rows</text>
+<text class="t mut" x="836" y="212" font-size="11.5">· BU scope — <tspan class="mono">viewBuIds</tspan> / <tspan class="mono">editBuIds</tspan></text>
+<text class="t mut" x="836" y="232" font-size="11.5">· ownership — by region, sales group or direct</text>
+<text class="t mut" x="836" y="252" font-size="11.5">· field-level write whitelists</text>
+<text class="t mut" x="836" y="272" font-size="11.5">· immutable fields: <tspan class="mono">buId · fy · customerId</tspan></text>
+<text class="t mut" x="836" y="292" font-size="11.5">· time gates — <tspan class="mono">post_lock</tspan> permissions</text>
+
+<!-- two patterns -->
+<rect class="band" x="40" y="338" width="580" height="164" rx="12"/>
+<text class="t kick" x="60" y="364" font-size="11">TWO PATTERNS THAT CARRY MOST OF THE WEIGHT</text>
+<text class="t" x="60" y="390" font-size="12.5" font-weight="700">1 · The <tspan class="mono">_assigned</tspan> suffix</text>
+<text class="t mono" x="60" y="412" font-size="11.5">customer.edit_sales_data          → any customer</text>
+<text class="t mono" x="60" y="430" font-size="11.5">customer.edit_sales_data_assigned → mine only</text>
+<text class="t mut" x="60" y="450" font-size="11.5">ABAC scope is encoded in the permission NAME, so the API resolves</text>
+<text class="t mut" x="60" y="466" font-size="11.5">ownership without special-case branching per endpoint.</text>
+<text class="t" x="60" y="490" font-size="12.5" font-weight="700">2 · <tspan class="mono">post_lock</tspan> time gates — the roles don't change, the lifecycle does</text>
+
+<!-- lifecycle -->
+<rect class="band" x="632" y="338" width="568" height="164" rx="12"/>
+<text class="t kick" x="652" y="364" font-size="11">BUDGET LOCK LIFECYCLE</text>
+<g font-size="11.5">
+  <rect class="box" x="652" y="378" width="140" height="52" rx="7"/>
+  <text class="t" x="664" y="398" font-weight="700">PLANNING</text><text class="t mut" x="664" y="416">all edits allowed</text>
+  <path class="arrow" marker-end="url(#a)" d="M792 404 L812 404"/>
+  <rect class="box" x="818" y="378" width="140" height="52" rx="7"/>
+  <text class="t" x="830" y="398" font-weight="700">LOCKED</text><text class="t mut" x="830" y="416">review · read-only</text>
+  <path class="arrow" marker-end="url(#a)" d="M958 404 L978 404"/>
+  <rect class="box" x="984" y="378" width="196" height="52" rx="7"/>
+  <text class="t" x="996" y="398" font-weight="700">EXECUTION</text><text class="t mut" x="996" y="416">only post_lock permissions survive</text>
+</g>
+<rect class="accentbox" x="652" y="442" width="528" height="46" rx="7"/>
+<text class="t" x="664" y="462" font-size="12" font-weight="700">STRUCTURAL UNLOCK — CEO or admin only</text>
+<text class="t mut" x="664" y="478" font-size="11">Temporarily reopens an approved budget without resetting the lifecycle.</text>
+
+<!-- ORACLE -->
+<rect class="band" x="40" y="518" width="1160" height="200" rx="12"/>
+<text class="t kick" x="60" y="544" font-size="11">PROVING IT STAYS TRUE — THE DECISION ORACLE</text>
+
+<rect class="aibox" x="60" y="580" width="240" height="118" rx="8"/>
+<text class="t" x="74" y="602" font-size="13" font-weight="700">Scenario</text>
+<text class="t mut" x="74" y="622" font-size="11">actor + resource + context</text>
+<text class="t mut" x="74" y="642" font-size="11">40 hand-written golden scenarios</text>
+<text class="t mut" x="74" y="660" font-size="11">+ pairwise-generated matrix:</text>
+<text class="t mut" x="74" y="678" font-size="11">quick ~15 · full ~100+</text>
+
+<path class="arrow" marker-end="url(#a)" d="M300 618 L332 596"/>
+<path class="arrow" marker-end="url(#a)" d="M300 660 L332 682"/>
+
+<rect class="okbox" x="338" y="562" width="290" height="72" rx="8"/>
+<text class="t" x="352" y="584" font-size="13" font-weight="700">ORACLE — predicts</text>
+<text class="t mut" x="352" y="604" font-size="11">Pure function mirroring permission →</text>
+<text class="t mut" x="352" y="620" font-size="11">scope → ownership → lock policy.</text>
+
+<rect class="box" x="338" y="648" width="290" height="66" rx="8"/>
+<text class="t" x="352" y="670" font-size="13" font-weight="700">EXECUTOR — observes</text>
+<text class="t mut" x="352" y="690" font-size="11">Fires the real request. API status codes,</text>
+<text class="t mut" x="352" y="706" font-size="11">UI editability, or a live backend.</text>
+
+<path class="arrow" marker-end="url(#a)" d="M628 598 L664 636"/>
+<path class="arrow" marker-end="url(#a)" d="M628 680 L664 648"/>
+
+<rect class="badbox" x="670" y="612" width="240" height="60" rx="8"/>
+<text class="t" x="684" y="638" font-size="14" font-weight="700">Mismatch = REGRESSION</text>
+<text class="t mut" x="684" y="658" font-size="11">Build fails. Nightly, 02:00 UTC.</text>
+
+<rect class="box" x="930" y="562" width="250" height="72" rx="8"/>
+<text class="t" x="944" y="584" font-size="12.5" font-weight="700">Quarantine with an expiry date</text>
+<text class="t mut" x="944" y="604" font-size="11">Every quarantined scenario has an owner,</text>
+<text class="t mut" x="944" y="620" font-size="11">a reason, and a date it starts failing again.</text>
+
+<rect class="badbox" x="930" y="648" width="250" height="66" rx="8"/>
+<text class="t" x="944" y="670" font-size="12.5" font-weight="700">Sentinels cannot be quarantined</text>
+<text class="t mono" x="944" y="690" font-size="9.5">SENTINEL_ACCOUNT_MANAGER_CANNOT_ADMIN</text>
+<text class="t mut" x="944" y="706" font-size="11">If a guardrail fails, the build fails. Period.</text>
+
+<text class="t mut" x="60" y="748" font-size="12">It has caught real regressions no unit test would find: a permission-string typo, a missing scope check on a new endpoint, an ABAC condition that didn't fire for exactly one role.</text>
+<text class="t" x="60" y="772" font-size="12.5" font-weight="700">The generalisable idea: if you can express your authorization rules as a pure function, you can differentially test your real system against them forever.</text>
+</svg>

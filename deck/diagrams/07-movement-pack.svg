@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 720" width="1240" height="720" role="img" aria-label="Movement Pack: the deterministic discovery layer beneath agent narration">
+<style>
+  .bg{fill:#ffffff}.band{fill:#f4f6fa;stroke:#dde3ec}.box{fill:#ffffff;stroke:#c3ccda}
+  .accentbox{fill:#fff4ec;stroke:#ff7a29}.aibox{fill:#eef6ff;stroke:#4da3ff}
+  .okbox{fill:#eefaf3;stroke:#3ddc97}.badbox{fill:#fdeeee;stroke:#e05555}
+  .t{font-family:Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#111827}
+  .mut{fill:#5b6577}.kick{fill:#ff7a29;font-weight:700;letter-spacing:.14em}
+  .mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .arrow{stroke:#8b95a7;fill:none;stroke-width:1.6}.ah{fill:#8b95a7}
+  @media (prefers-color-scheme: dark){
+    .bg{fill:#0c1017}.band{fill:#131924;stroke:#242c3a}.box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}.aibox{fill:#10203a;stroke:#4da3ff}
+    .okbox{fill:#0f2a1f;stroke:#3ddc97}.badbox{fill:#2c1414;stroke:#e05555}
+    .t{fill:#e8eaf0}.mut{fill:#9aa3b2}.arrow{stroke:#6b7688}.ah{fill:#6b7688}
+  }
+.bg{fill:#0c1017}.band{fill:#131924;stroke:#242c3a}.box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}.aibox{fill:#10203a;stroke:#4da3ff}
+    .okbox{fill:#0f2a1f;stroke:#3ddc97}.badbox{fill:#2c1414;stroke:#e05555}
+    .t{fill:#e8eaf0}.mut{fill:#9aa3b2}.arrow{stroke:#6b7688}.ah{fill:#6b7688}
+</style>
+<rect class="bg" width="1240" height="720"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+
+<text class="t kick" x="40" y="40" font-size="13">THE MOVEMENT PACK — WHERE DISCOVERY STOPS BEING THE MODEL'S JOB</text>
+<text class="t mut" x="40" y="64" font-size="13">LLMs are unreliable at discovery and good at synthesis. So don't ask them to discover.</text>
+
+<!-- contrast -->
+<rect class="badbox" x="40" y="88" width="570" height="128" rx="12"/>
+<text class="t kick" x="60" y="114" font-size="11">A RAW DIFF SAYS</text>
+<text class="t" x="60" y="144" font-size="14" font-style="italic">"Customer X's balance went from A to B."</text>
+<text class="t mut" x="60" y="172" font-size="11.5">Ask an LLM to find the movers across 156 weeks of Cosmos documents and you get</text>
+<text class="t mut" x="60" y="190" font-size="11.5">hallucinated entities, rankings that change between runs, and — worst — access</text>
+<text class="t mut" x="60" y="208" font-size="11.5">control handed to a probabilistic system. No.</text>
+
+<rect class="okbox" x="630" y="88" width="570" height="128" rx="12"/>
+<text class="t kick" x="650" y="114" font-size="11">A BUSINESS EVENT SAYS</text>
+<text class="t" x="650" y="140" font-size="13" font-style="italic">"Customer X's overdue balance grew materially per</text>
+<text class="t" x="650" y="160" font-size="13" font-style="italic">the Finance threshold; ranked #3 of this week's</text>
+<text class="t" x="650" y="180" font-size="13" font-style="italic">debtors movers; here is the citation."</text>
+<text class="t mut" x="650" y="206" font-size="11.5">Typed. Ranked. Scope-filtered. Citable. Reproducible.</text>
+
+<!-- pipeline -->
+<rect class="band" x="40" y="232" width="1160" height="210" rx="12"/>
+<text class="t kick" x="60" y="258" font-size="11">THE DETERMINISTIC PIPELINE</text>
+
+<g font-size="11.5">
+  <rect class="box" x="60" y="272" width="200" height="60" rx="8"/>
+  <text class="t" x="74" y="294" font-size="12.5" font-weight="700">snapshotReader</text>
+  <text class="t mut" x="74" y="312" >weekly retained snapshots,</text>
+  <text class="t mut" x="74" y="326" >stamped weekNum + runFy</text>
+  <path class="arrow" marker-end="url(#a)" d="M260 302 L288 302"/>
+
+  <rect class="box" x="294" y="272" width="200" height="60" rx="8"/>
+  <text class="t" x="308" y="294" font-size="12.5" font-weight="700">diffSnapshots</text>
+  <text class="t mut" x="308" y="312">week-over-week deltas</text>
+  <text class="t mut" x="308" y="326">per connector</text>
+  <path class="arrow" marker-end="url(#a)" d="M494 302 L522 302"/>
+
+  <rect class="accentbox" x="528" y="272" width="264" height="60" rx="8"/>
+  <text class="t" x="542" y="294" font-size="12.5" font-weight="700">buildMovementPack</text>
+  <text class="t mut" x="542" y="312">ranking · materiality thresholds · scope</text>
+  <text class="t mut" x="542" y="326">filter · metric-kind tags · drift detection</text>
+  <path class="arrow" marker-end="url(#a)" d="M792 302 L820 302"/>
+
+  <rect class="aibox" x="826" y="272" width="354" height="60" rx="8"/>
+  <text class="t" x="840" y="294" font-size="12.5" font-weight="700">agent narrates</text>
+  <text class="t mut" x="840" y="312">receives a typed, ranked, already-scoped list with</text>
+  <text class="t mut" x="840" y="326">citations attached — and writes prose about it</text>
+</g>
+
+<rect class="box" x="60" y="348" width="546" height="80" rx="8"/>
+<text class="t" x="76" y="370" font-size="12.5" font-weight="700">What the agent NEVER does</text>
+<text class="t mut" x="76" y="390" font-size="11.5">· decide what counts as important (materiality is a business rule → code)</text>
+<text class="t mut" x="76" y="408" font-size="11.5">· perform the access-control filtering (scope is a security boundary → code)</text>
+<text class="t mut" x="76" y="424" font-size="11.5">· invent the ranking (reproducibility matters → code)</text>
+
+<rect class="box" x="626" y="348" width="554" height="80" rx="8"/>
+<text class="t" x="642" y="370" font-size="12.5" font-weight="700">Metric-kind tagging — the subtle one</text>
+<text class="t mut" x="642" y="390" font-size="11.5">Every value field is tagged <tspan class="mono">stock</tspan> | <tspan class="mono">flow</tspan> | <tspan class="mono">cumulative</tspan>.</text>
+<text class="t mut" x="642" y="408" font-size="11.5">A stock value (closing balance) and a flow value (weekly sales) mean different</text>
+<text class="t mut" x="642" y="424" font-size="11.5">things when you diff them. Untagged, an agent will confidently mix the two.</text>
+
+<!-- identity gate -->
+<rect class="accentbox" x="40" y="458" width="1160" height="146" rx="12"/>
+<text class="t kick" x="60" y="484" font-size="11">THE DEPENDENCY NOBODY BUDGETS FOR — IDENTITY RESOLUTION</text>
+<rect class="badbox" x="60" y="496" width="546" height="90" rx="8"/>
+<text class="t" x="76" y="518" font-size="12.5" font-weight="700">The failure mode</text>
+<text class="t mut" x="76" y="538" font-size="11.5">If a customer's SAP key drifts between weeks, a naive diff renders one</text>
+<text class="t mut" x="76" y="556" font-size="11.5"><tspan font-style="italic">renamed</tspan> customer as <tspan font-weight="700">"removed + added"</tspan>.</text>
+<text class="t mut" x="76" y="576" font-size="11.5">The agent then narrates a churn event that never happened — fluently.</text>
+
+<rect class="okbox" x="626" y="496" width="554" height="90" rx="8"/>
+<text class="t" x="642" y="518" font-size="12.5" font-weight="700">The fix — shipped FIRST, deliberately</text>
+<text class="t mut" x="642" y="538" font-size="11.5">A canonical customer identity per BU with <tspan font-weight="700">full alias history</tspan>, so a rename</text>
+<text class="t mut" x="642" y="556" font-size="11.5">is a rename. Movement Pack shipped <tspan font-style="italic">behind</tspan> that sprint, and the whole</text>
+<text class="t mut" x="642" y="576" font-size="11.5">agent framework shipped behind Movement Pack. Hard sequencing, no shortcuts.</text>
+
+<!-- quote -->
+<rect class="band" x="40" y="620" width="1160" height="76" rx="12"/>
+<text class="t" x="60" y="654" font-size="17" font-weight="700">Agent narration over unstable keys is just confident lying at scale.</text>
+<text class="t mut" x="60" y="680" font-size="12">Everyone wants to build the agent. Almost nobody sequences the identity work first. We held the feature for a sprint, and it was the right call.</text>
+</svg>

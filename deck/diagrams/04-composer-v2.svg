@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 760" width="1240" height="760" role="img" aria-label="Composer V2: chat-first agent authoring, five layers, one front door">
+<style>
+  .bg{fill:#ffffff}.band{fill:#f4f6fa;stroke:#dde3ec}.box{fill:#ffffff;stroke:#c3ccda}
+  .accentbox{fill:#fff4ec;stroke:#ff7a29}.aibox{fill:#eef6ff;stroke:#4da3ff}
+  .okbox{fill:#eefaf3;stroke:#3ddc97}.badbox{fill:#fdeeee;stroke:#e05555}
+  .t{font-family:Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#111827}
+  .mut{fill:#5b6577}.kick{fill:#ff7a29;font-weight:700;letter-spacing:.14em}
+  .mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .arrow{stroke:#8b95a7;fill:none;stroke-width:1.6}.ah{fill:#8b95a7}
+  @media (prefers-color-scheme: dark){
+    .bg{fill:#0c1017}.band{fill:#131924;stroke:#242c3a}.box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}.aibox{fill:#10203a;stroke:#4da3ff}
+    .okbox{fill:#0f2a1f;stroke:#3ddc97}.badbox{fill:#2c1414;stroke:#e05555}
+    .t{fill:#e8eaf0}.mut{fill:#9aa3b2}.arrow{stroke:#6b7688}.ah{fill:#6b7688}
+  }
+.bg{fill:#0c1017}.band{fill:#131924;stroke:#242c3a}.box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}.aibox{fill:#10203a;stroke:#4da3ff}
+    .okbox{fill:#0f2a1f;stroke:#3ddc97}.badbox{fill:#2c1414;stroke:#e05555}
+    .t{fill:#e8eaf0}.mut{fill:#9aa3b2}.arrow{stroke:#6b7688}.ah{fill:#6b7688}
+</style>
+<rect class="bg" width="1240" height="760"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+
+<text class="t kick" x="40" y="40" font-size="13">COMPOSER V2 — BUILD AN AGENT BY TALKING TO IT</text>
+<text class="t mut" x="40" y="64" font-size="13">V1 was a five-step stepper with typed form fields. It worked and nobody enjoyed it. V2 is a conversation — and did <tspan font-weight="700">not</tspan> build a second chat runtime.</text>
+
+<!-- three layers that never blur -->
+<rect class="band" x="40" y="88" width="1160" height="112" rx="12"/>
+<text class="t kick" x="60" y="114" font-size="11">THE PRINCIPLE — THREE LAYERS THAT NEVER BLUR</text>
+<rect class="box" x="60" y="124" width="366" height="62" rx="8"/>
+<text class="t" x="76" y="146" font-size="13" font-weight="700">The USER speaks business intent</text>
+<text class="t mut" x="76" y="166" font-size="11.5">"Every Monday, tell me which customers slipped</text>
+<text class="t mut" x="76" y="180" font-size="11.5">on payment and what it costs us."</text>
+<rect class="aibox" x="438" y="124" width="366" height="62" rx="8"/>
+<text class="t" x="454" y="146" font-size="13" font-weight="700">The LLM proposes structure</text>
+<text class="t mut" x="454" y="166" font-size="11.5">cadence · connectors · lookback · role lens</text>
+<text class="t mut" x="454" y="180" font-size="11.5">· customer scope · which capabilities to use</text>
+<rect class="accentbox" x="816" y="124" width="364" height="62" rx="8"/>
+<text class="t" x="832" y="146" font-size="13" font-weight="700">The SERVER owns the contract</text>
+<text class="t mut" x="832" y="166" font-size="11.5">Zod validation · materialisation · linting</text>
+<text class="t mut" x="832" y="180" font-size="11.5">· publish authority. Non-negotiable.</text>
+
+<!-- pipeline -->
+<rect class="band" x="40" y="216" width="1160" height="288" rx="12"/>
+<text class="t kick" x="60" y="242" font-size="11">THE FOUR AUTHORING TOOLS — THE ONLY BRIDGE FROM CHAT TO THE AGENT PIPELINE</text>
+
+<rect class="box" x="60" y="256" width="264" height="118" rx="8"/>
+<text class="t mono" x="74" y="278" font-size="12" font-weight="700">propose_agent_draft</text>
+<text class="t mut" x="74" y="300" font-size="11">Zod-validates the LLM's proposal against</text>
+<text class="t mut" x="74" y="315" font-size="11"><tspan class="mono">ComposerIntentDraftV1</tspan> (business intent),</text>
+<text class="t mut" x="74" y="330" font-size="11">then MATERIALISES it into an</text>
+<text class="t mut" x="74" y="345" font-size="11"><tspan class="mono">AgentDefinitionV1</tspan> and re-validates against</text>
+<text class="t mut" x="74" y="360" font-size="11">the same schema scheduled agents use.</text>
+
+<path class="arrow" marker-end="url(#a)" d="M324 315 L354 315"/>
+
+<rect class="box" x="360" y="256" width="264" height="118" rx="8"/>
+<text class="t mono" x="374" y="278" font-size="12" font-weight="700">validate_draft_silently</text>
+<text class="t mut" x="374" y="300" font-size="11">Runs the same <tspan font-weight="700">11-check linter</tspan> the</text>
+<text class="t mut" x="374" y="315" font-size="11">publish path uses — not a lighter</text>
+<text class="t mut" x="374" y="330" font-size="11">"preview" variant.</text>
+<text class="t mut" x="374" y="352" font-size="11">Unknown capability names are rejected</text>
+<text class="t mut" x="374" y="367" font-size="11">at materialisation, not at run time.</text>
+
+<path class="arrow" marker-end="url(#a)" d="M624 315 L654 315"/>
+
+<rect class="okbox" x="660" y="256" width="264" height="118" rx="8"/>
+<text class="t mono" x="674" y="278" font-size="12" font-weight="700">dry_run_draft</text>
+<text class="t mut" x="674" y="300" font-size="11">Invokes the <tspan font-weight="700">REAL</tspan> MCP-backed agent</text>
+<text class="t mut" x="674" y="315" font-size="11">runtime with <tspan class="mono">trigger:'dry-run'</tspan>.</text>
+<text class="t mut" x="674" y="337" font-size="11">Not a simulation, not a preview render.</text>
+<text class="t mut" x="674" y="352" font-size="11">What you see in the chat is what the</text>
+<text class="t mut" x="674" y="367" font-size="11">scheduler will produce at 08:00.</text>
+
+<path class="arrow" marker-end="url(#a)" d="M924 315 L954 315"/>
+
+<rect class="badbox" x="960" y="256" width="220" height="118" rx="8"/>
+<text class="t" x="974" y="278" font-size="12" font-weight="700">PUBLISH</text>
+<text class="t" x="974" y="300" font-size="12" font-weight="700">The LLM has no</text>
+<text class="t" x="974" y="316" font-size="12" font-weight="700">publish tool.</text>
+<text class="t mut" x="974" y="338" font-size="11">A UI action carries a server-only</text>
+<text class="t mut" x="974" y="353" font-size="11"><tspan class="mono">publishToken</tspan> — generated, rotated</text>
+<text class="t mut" x="974" y="368" font-size="11">and consumed entirely server-side.</text>
+
+<!-- draft store -->
+<rect class="box" x="60" y="390" width="546" height="98" rx="8"/>
+<text class="t" x="76" y="412" font-size="13" font-weight="700">Draft store — deliberately ephemeral</text>
+<text class="t mut" x="76" y="434" font-size="11.5">· 30-minute TTL · identity-bound to the session</text>
+<text class="t mut" x="76" y="452" font-size="11.5">· deep-cloned on ingress AND egress, so no caller can mutate stored state by reference</text>
+<text class="t mut" x="76" y="470" font-size="11.5">· <tspan class="mono">publishToken</tspan> never appears in a model-visible tool result or a client payload · single-use after publish</text>
+
+<rect class="box" x="618" y="390" width="562" height="98" rx="8"/>
+<text class="t" x="634" y="412" font-size="13" font-weight="700">What made this cheap to build</text>
+<text class="t mut" x="634" y="434" font-size="11.5">The chat engine already had multi-turn state, SSE streaming, tool execution, citation</text>
+<text class="t mut" x="634" y="452" font-size="11.5">extraction, auth context, telemetry, abort and retry — months of investment.</text>
+<text class="t" x="634" y="472" font-size="11.5" font-weight="700">Composer V2 = same runtime + a different system prompt + a six-tool allowlist. That is the entire delta.</text>
+
+<!-- do no harm -->
+<rect class="accentbox" x="40" y="520" width="580" height="196" rx="12"/>
+<text class="t kick" x="60" y="546" font-size="11">THE INVARIANT THAT MADE IT SAFE TO SHIP</text>
+<text class="t" x="60" y="574" font-size="14" font-weight="700">V1-indistinguishability</text>
+<text class="t mut" x="60" y="598" font-size="12">Every agent published by Composer V2 must be byte-equivalent to one</text>
+<text class="t mut" x="60" y="616" font-size="12">authored through the old typed pipeline. A snapshot suite enforces it.</text>
+<text class="t mut" x="60" y="640" font-size="12">Which means: the scheduler, the runtime, the policy hooks and the</text>
+<text class="t mut" x="60" y="658" font-size="12">report format never had to learn that Composer V2 exists.</text>
+<text class="t" x="60" y="686" font-size="12" font-weight="700">A new authoring UX shipped with zero blast radius on the execution path.</text>
+<text class="t mut" x="60" y="706" font-size="11.5">Twelve rounds of independent agent review are traced in the plan document.</text>
+
+<rect class="band" x="632" y="520" width="568" height="196" rx="12"/>
+<text class="t kick" x="652" y="546" font-size="11">NEXT — COMPOSER V3 (PLANNED)</text>
+<text class="t mut" x="652" y="572" font-size="12">V2's constraint: the artefact lives <tspan font-style="italic">inside</tspan> the chat. Iterating means</text>
+<text class="t mut" x="652" y="590" font-size="12">scrolling between the latest preview and the message you're refining.</text>
+<text class="t" x="652" y="616" font-size="12.5" font-weight="700">V3 inverts it: the artefact is the viewport, chat becomes the side rail.</text>
+<text class="t mut" x="652" y="640" font-size="12">Plus three BI-specific affordances no general-purpose canvas has:</text>
+<text class="t mut" x="652" y="662" font-size="12">· lineage chip — which dataset produced this section</text>
+<text class="t mut" x="652" y="680" font-size="12">· plan-mode preview — see the tool plan before it runs</text>
+<text class="t mut" x="652" y="698" font-size="12">· per-section execution badges — what actually resolved, per block</text>
+</svg>

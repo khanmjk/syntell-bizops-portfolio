@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 880" width="1240" height="880" role="img" aria-label="AI engine core: chat profiles, tool profiles, orchestration, cache and streaming">
+<style>
+  .bg{fill:#ffffff}
+  .band{fill:#f4f6fa;stroke:#dde3ec}
+  .box{fill:#ffffff;stroke:#c3ccda}
+  .accentbox{fill:#fff4ec;stroke:#ff7a29}
+  .aibox{fill:#eef6ff;stroke:#4da3ff}
+  .okbox{fill:#eefaf3;stroke:#3ddc97}
+  .warnbox{fill:#fff8e8;stroke:#e0a500}
+  .t{font-family:Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;fill:#111827}
+  .mut{fill:#5b6577}
+  .kick{fill:#ff7a29;font-weight:700;letter-spacing:.14em}
+  .mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .arrow{stroke:#8b95a7;fill:none;stroke-width:1.6}
+  .ah{fill:#8b95a7}
+  @media (prefers-color-scheme: dark){
+    .bg{fill:#0c1017}
+    .band{fill:#131924;stroke:#242c3a}
+    .box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}
+    .aibox{fill:#10203a;stroke:#4da3ff}
+    .okbox{fill:#0f2a1f;stroke:#3ddc97}
+    .warnbox{fill:#2b2410;stroke:#e0a500}
+    .t{fill:#e8eaf0}
+    .mut{fill:#9aa3b2}
+    .arrow{stroke:#6b7688}
+    .ah{fill:#6b7688}
+  }
+.bg{fill:#0c1017}
+    .band{fill:#131924;stroke:#242c3a}
+    .box{fill:#171e2a;stroke:#2c3646}
+    .accentbox{fill:#2a1a10;stroke:#ff7a29}
+    .aibox{fill:#10203a;stroke:#4da3ff}
+    .okbox{fill:#0f2a1f;stroke:#3ddc97}
+    .warnbox{fill:#2b2410;stroke:#e0a500}
+    .t{fill:#e8eaf0}
+    .mut{fill:#9aa3b2}
+    .arrow{stroke:#6b7688}
+    .ah{fill:#6b7688}
+</style>
+<rect class="bg" width="1240" height="880"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+
+<text class="t kick" x="40" y="40" font-size="13">AI ENGINE CORE — ONE RUNTIME, TWO LAYERS OF ROUTING</text>
+<text class="t mut" x="40" y="64" font-size="13">83 tool definitions · 13 tool groups · hard tool budgets · SSE streaming · 3-layer cache</text>
+
+<!-- request -->
+<rect class="box" x="40" y="88" width="330" height="60" rx="9"/>
+<text class="t" x="56" y="112" font-size="13.5" font-weight="700">Request</text>
+<text class="t mut mono" x="56" y="132" font-size="11">{ message, profileId?, promptContext, buId, fy }</text>
+<path class="arrow" marker-end="url(#a)" d="M370 118 L424 118"/>
+
+<!-- LAYER 0 chat profile -->
+<rect class="band" x="430" y="80" width="770" height="130" rx="12"/>
+<text class="t kick" x="450" y="106" font-size="11">LAYER 0 — CHAT PROFILE  (which brain answers)</text>
+<rect class="aibox" x="450" y="116" width="238" height="76" rx="8"/>
+<text class="t" x="464" y="138" font-size="13" font-weight="700">general <tspan class="mut" font-weight="400">(sentinel)</tspan></text>
+<text class="t mut" x="464" y="157" font-size="11">The BI copilot. Never registered as a</text>
+<text class="t mut" x="464" y="172" font-size="11">profile object — means "unchanged flow".</text>
+<text class="t mut" x="464" y="186" font-size="11">Tool routing happens in Layer 1.</text>
+
+<rect class="accentbox" x="700" y="116" width="238" height="76" rx="8"/>
+<text class="t" x="714" y="138" font-size="13" font-weight="700">composer-v2</text>
+<text class="t mut" x="714" y="157" font-size="11">Agent-authoring brain. 6-tool allowlist:</text>
+<text class="t mut" x="714" y="172" font-size="11">4 authoring + 2 disambiguation.</text>
+<text class="t mut" x="714" y="186" font-size="11">Same runtime, different prompt.</text>
+
+<rect class="box" x="950" y="116" width="230" height="76" rx="8"/>
+<text class="t" x="964" y="138" font-size="13" font-weight="700">agent-report-validator</text>
+<text class="t mut" x="964" y="157" font-size="11">Server-only. Never UI-selectable.</text>
+<text class="t mut" x="964" y="172" font-size="11">Grades agent output for grounding,</text>
+<text class="t mut" x="964" y="186" font-size="11">scope and publishability.</text>
+
+<path class="arrow" marker-end="url(#a)" d="M569 210 L569 252"/>
+<text class="t mut" x="580" y="240" font-size="11.5">profileId = general → fall through to tool routing</text>
+
+<!-- LAYER 1 tool profiles -->
+<rect class="band" x="40" y="256" width="1160" height="176" rx="12"/>
+<text class="t kick" x="60" y="282" font-size="11">LAYER 1 — TOOL PROFILE  (which subset of the 83 tools this question needs)</text>
+<text class="t mut" x="60" y="302" font-size="11.5">Selected by regex over the question + the page the user is on (<tspan class="mono">promptContext.profileHint</tspan>). Not interchangeable with Layer 0 — chat profile = page, tool profile = within-chat routing.</text>
+
+<g font-size="11.5">
+  <rect class="box" x="60" y="316" width="176" height="46" rx="7"/><text class="t" x="72" y="336" font-weight="700">finance</text><text class="t mut" x="72" y="352">67 tools</text>
+  <rect class="box" x="246" y="316" width="176" height="46" rx="7"/><text class="t" x="258" y="336" font-weight="700">sap</text><text class="t mut" x="258" y="352">66 tools</text>
+  <rect class="box" x="432" y="316" width="176" height="46" rx="7"/><text class="t" x="444" y="336" font-weight="700">sap_analytics</text><text class="t mut" x="444" y="352">14 tools</text>
+  <rect class="box" x="618" y="316" width="176" height="46" rx="7"/><text class="t" x="630" y="336" font-weight="700">engineering</text><text class="t mut" x="630" y="352">16 tools · Jira</text>
+  <rect class="box" x="804" y="316" width="176" height="46" rx="7"/><text class="t" x="816" y="336" font-weight="700">market</text><text class="t mut" x="816" y="352">16 tools</text>
+  <rect class="box" x="990" y="316" width="190" height="46" rx="7"/><text class="t" x="1002" y="336" font-weight="700">scenario</text><text class="t mut" x="1002" y="352">13 tools · simulation</text>
+
+  <rect class="box" x="60" y="370" width="176" height="46" rx="7"/><text class="t" x="72" y="390" font-weight="700">stock_decision</text><text class="t mut" x="72" y="406">5 tools</text>
+  <rect class="box" x="246" y="370" width="176" height="46" rx="7"/><text class="t" x="258" y="390" font-weight="700">production</text><text class="t mut" x="258" y="406">4 tools</text>
+  <rect class="box" x="432" y="370" width="176" height="46" rx="7"/><text class="t" x="444" y="390" font-weight="700">contract_mgmt</text><text class="t mut" x="444" y="406">4 tools</text>
+  <rect class="box" x="618" y="370" width="176" height="46" rx="7"/><text class="t" x="630" y="390" font-weight="700">roadmap</text><text class="t mut" x="630" y="406">4 tools</text>
+  <rect class="box" x="804" y="370" width="176" height="46" rx="7"/><text class="t" x="816" y="390" font-weight="700">snapshot</text><text class="t mut" x="816" y="406">2 tools · temporal</text>
+  <rect class="box" x="990" y="370" width="190" height="46" rx="7"/><text class="t" x="1002" y="390" font-weight="700">methodology</text><text class="t mut" x="1002" y="406">3 tools · "how is this computed?"</text>
+</g>
+
+<path class="arrow" marker-end="url(#a)" d="M620 432 L620 472"/>
+
+<!-- ORCHESTRATOR -->
+<rect class="band" x="40" y="476" width="760" height="212" rx="12"/>
+<text class="t kick" x="60" y="502" font-size="11">ORCHESTRATION LOOP</text>
+<rect class="aibox" x="60" y="512" width="352" height="70" rx="8"/>
+<text class="t" x="74" y="534" font-size="13" font-weight="700">Tool-calling loop (Claude)</text>
+<text class="t mut" x="74" y="553" font-size="11">model proposes tool → executor runs it → result returns</text>
+<text class="t mut" x="74" y="568" font-size="11">→ repeat until the model answers</text>
+<rect class="warnbox" x="426" y="512" width="356" height="70" rx="8"/>
+<text class="t" x="440" y="534" font-size="13" font-weight="700">Hard budgets — not suggestions</text>
+<text class="t mut mono" x="440" y="553" font-size="11">MAX_TOOL_CALLS 15 · ITERATIONS 10 · +1 w/ chart</text>
+<text class="t mut mono" x="440" y="568" font-size="11">ORCHESTRATION 300s · PROVIDER CALL 60s</text>
+
+<rect class="box" x="60" y="594" width="352" height="80" rx="8"/>
+<text class="t" x="74" y="616" font-size="13" font-weight="700">aiToolExecutor</text>
+<text class="t mut" x="74" y="635" font-size="11">Every handler enforces the BU AI Data Policy:</text>
+<text class="t mut" x="74" y="650" font-size="11">read-only · cross-BU blocked · restricted fields filtered</text>
+<text class="t mut" x="74" y="665" font-size="11">Unknown or disallowed tool → structured "unavailable" result</text>
+<rect class="okbox" x="426" y="594" width="356" height="80" rx="8"/>
+<text class="t" x="440" y="616" font-size="13" font-weight="700">3-layer cache</text>
+<text class="t mut" x="440" y="635" font-size="11">1 · request memo — dedupes within one answer</text>
+<text class="t mut" x="440" y="650" font-size="11">2 · shared LRU — across users, same BU/FY</text>
+<text class="t mut" x="440" y="665" font-size="11">3 · ETL-aware freshness — keyed on manifest version</text>
+
+<!-- OUTPUT -->
+<rect class="band" x="820" y="476" width="380" height="212" rx="12"/>
+<text class="t kick" x="840" y="502" font-size="11">STREAMING + PROVENANCE</text>
+<rect class="box" x="840" y="512" width="340" height="70" rx="8"/>
+<text class="t" x="854" y="534" font-size="13" font-weight="700">SSE transport</text>
+<text class="t mut" x="854" y="553" font-size="11">Event shape is a frozen contract the frontend</text>
+<text class="t mut" x="854" y="568" font-size="11">depends on — validated by its own test layer.</text>
+<rect class="box" x="840" y="594" width="340" height="80" rx="8"/>
+<text class="t" x="854" y="616" font-size="13" font-weight="700">Every answer is stamped</text>
+<text class="t mut" x="854" y="635" font-size="11">· tool chips — which grounded query ran</text>
+<text class="t mut" x="854" y="650" font-size="11">· data provenance + snapshot age</text>
+<text class="t mut" x="854" y="665" font-size="11">· confidence level + model that produced it</text>
+
+<path class="arrow" marker-end="url(#a)" d="M620 688 L620 730"/>
+
+<!-- WHY -->
+<rect class="accentbox" x="40" y="736" width="1160" height="112" rx="12"/>
+<text class="t kick" x="60" y="762" font-size="11">WHY TOOLS AND NOT RAG</text>
+<text class="t" x="60" y="788" font-size="13.5" font-weight="700">This is not a document-search problem. It is a database-query problem.</text>
+<text class="t mut" x="60" y="810" font-size="12">Retrieval is probabilistic: its failure mode is a confident answer derived from <tspan font-style="italic">approximately</tspan> the right rows — indistinguishable from a correct one until</text>
+<text class="t mut" x="60" y="828" font-size="12">someone checks. A typed tool over a partition-targeted query wins on accuracy, auditability, cost and latency — and every claim traces back to a specific call.</text>
+</svg>
